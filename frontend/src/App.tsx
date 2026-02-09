@@ -7,16 +7,16 @@ function App() {
 
     return (
         <>
-            <div className="container flex items-center justify-center min-h-screen flex-1">
+            <div className="container">
                 {/* Control panel for fine-tuning controls */}
-                <div className="control-panel bg-gray-600 min-h-screen box-border">
-                    <h2 className="text-2xl font-bold">Control Panel</h2>
-                </div>
+                <aside className="control-panel">
+                    <h2 className="control-panel-title">Control Panel</h2>
+                </aside>
 
                 {/* Main canvas */}
-                <div className="main-canvas flex items-center justify-center">
+                <main className="main-canvas">
                     <TwitchEmbed />
-                </div>
+                </main>
             </div>
         </>
     )
