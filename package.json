@@ -7,13 +7,17 @@
     "frontend",
     "backend"
   ],
+  "installConfig": {
+    "hoisting": "none"
+  },
   "scripts": {
     "dev:frontend": "npm run dev --workspace=frontend",
     "dev:backend": "npm run dev --workspace=backend",
-    "dev": "npm run dev --workspaces --if-present",
+    "dev": "concurrently \"npm run dev -w frontend\" \"npm run dev -w backend\"",
     "install-all": "npm install"
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
     "typescript": "^5.x.x"
   }
 }
