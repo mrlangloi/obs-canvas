@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import TwitchEmbed from './components/TwitchEmbed'
+import Canvas from './components/Canvas'
 
 function App() {
     const [count, setCount] = useState(0)
@@ -14,9 +15,7 @@ function App() {
                 </aside>
 
                 {/* Main canvas */}
-                <main className="main-canvas">
-                    <TwitchEmbed />
-                </main>
+                <Canvas />
             </div>
         </>
     )

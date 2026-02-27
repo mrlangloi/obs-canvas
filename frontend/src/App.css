@@ -15,9 +15,3 @@
 .control-panel.hidden {
   margin-left: -250px;
 }
-
-.main-canvas {
-  flex-grow: 1; /* This forces it to fill all available space */
-  padding: 20px;
-  background-color: #ecf0f1;
-}

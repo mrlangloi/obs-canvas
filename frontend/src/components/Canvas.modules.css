@@ -1,0 +1,6 @@
+.main-canvas {
+  position: relative;
+  flex-grow: 1; /* fill all available space */
+  padding: 20px;
+  background-color: #ecf0f1;
+}
