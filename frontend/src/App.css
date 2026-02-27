@@ -18,6 +18,7 @@
   color: var(--text-on-dark);
   position: relative;
   transition: margin-left 0.3s ease;
+  z-index: 1024;
 }
 
 /* when hidden, slide it out of view using negative margin */
@@ -36,6 +37,7 @@
   color: var(--text-on-dark);
   cursor: pointer;
   border-radius: 0 8px 8px 0;
+  z-index: 1024;
 }
 
 .main-canvas {
