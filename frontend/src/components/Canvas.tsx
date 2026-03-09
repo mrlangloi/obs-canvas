@@ -19,8 +19,8 @@ const Canvas = () => {
 
     // test elements
     const [cards, setCards] = useState<CardItem[]>([
-        { id: 1, position: { x: 50, y: 50 }, label: "New Item 1", text: "Item 1" },
-        { id: 2, position: { x: 200, y: 150 }, label: "New Item 2", text: "Item 2" },
+        { id: 1, position: { x: 50, y: 50 }, label: "New Item 1", text: "Item 1", url: "https://placehold.co/150x150", mediaType: 'image' },
+        { id: 2, position: { x: 200, y: 150 }, label: "New Item 2", text: "Item 2", url: "https://placehold.co/150x150", mediaType: 'image' },
     ]);
 
     // handle the movement of items during mouse-dragging
