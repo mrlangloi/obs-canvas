@@ -12,6 +12,8 @@ export interface CardItem {
     position: Position
     label: string
     text: string
+    url: string
+    mediaType: 'image' | 'video' | 'empty'
     rotation?: number
     opacity?: number
     zIndex?: number
@@ -25,6 +27,21 @@ const Card: React.FC<Props> = ({ card }) => {
     const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
         id: card.id,
     })
+
+    const getMediaType = (url: string) => {
+        const extension = url.split('.').pop()?.toLowerCase();
+        if (extension) {
+            const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'avif'];
+            const videoExtensions = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv'];
+            if (imageExtensions.includes(extension)) {
+                return 'image';
+            } else if (videoExtensions.includes(extension)) {
+                return 'video';
+            } else {
+                return 'empty';
+            }
+        }
+    }
 
     const style: React.CSSProperties = {
         position: 'absolute',
@@ -46,6 +63,7 @@ const Card: React.FC<Props> = ({ card }) => {
     return (
         <div ref={setNodeRef} style={style} {...listeners} {...attributes}>
             {card.text}
+            <img src={card.image} alt={`card ${card.id} image`} />
         </div>
     )
 }
