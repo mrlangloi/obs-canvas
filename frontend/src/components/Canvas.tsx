@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
 import { DndContext, type DragEndEvent, type DragMoveEvent } from '@dnd-kit/core';
 import { restrictToParentElement } from '@dnd-kit/modifiers';
 import throttle from 'lodash/throttle';
+import { useState } from 'react';
+import './Canvas.modules.css';
 import Card, { type CardItem } from './Card';
 import TwitchEmbed from './TwitchEmbed';
-import './Canvas.modules.css';
 
 // defined outside so it doesn't need to be recreated on every render
 // Partial<> type allows updating only specific fields without needing the entire item
@@ -21,6 +21,7 @@ const Canvas = () => {
     const [cards, setCards] = useState<CardItem[]>([
         { id: 1, position: { x: 50, y: 50 }, label: "New Item 1", text: "Item 1", url: "https://placehold.co/150x150", mediaType: 'image' },
         { id: 2, position: { x: 200, y: 150 }, label: "New Item 2", text: "Item 2", url: "https://placehold.co/150x150", mediaType: 'image' },
+        { id: 3, position: { x: 350, y: 250 }, label: "New Item 3", text: "Item 3", url: "", mediaType: 'empty' },
     ]);
 
     // handle the movement of items during mouse-dragging
