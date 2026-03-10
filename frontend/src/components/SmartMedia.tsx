@@ -2,11 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 
 interface SmartMediaProps {
     src: string;
-    alt: string;
     type: 'image' | 'video';
 }
 
-const SmartMedia: React.FC<SmartMediaProps> = ({ src, alt, type }) => {
+const SmartMedia: React.FC<SmartMediaProps> = ({ src, type }) => {
     const [isVisible, setIsVisible] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -47,7 +46,6 @@ const SmartMedia: React.FC<SmartMediaProps> = ({ src, alt, type }) => {
                 ) : (
                     <img 
                         src={src} 
-                        alt={alt} 
                         style={{ 
                             width: '100%', 
                             display: 'block' 

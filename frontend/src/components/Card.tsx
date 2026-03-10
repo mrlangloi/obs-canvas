@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
+import SmartMedia from './SmartMedia';
 
 interface Position {
     x: number
@@ -63,7 +64,7 @@ const Card: React.FC<Props> = ({ card }) => {
     return (
         <div ref={setNodeRef} style={style} {...listeners} {...attributes}>
             {card.text}
-            <img src={card.image} alt={`card ${card.id} image`} />
+            {card.mediaType !== 'empty' ? <SmartMedia src={card.url} type={card.mediaType} /> : <></>}
         </div>
     )
 }
