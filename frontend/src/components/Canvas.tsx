@@ -1,7 +1,7 @@
 import { DndContext, type DragEndEvent, type DragMoveEvent } from '@dnd-kit/core';
 import { restrictToParentElement } from '@dnd-kit/modifiers';
 import throttle from 'lodash/throttle';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './Canvas.modules.css';
 import Card, { type CardItem } from './Card';
 import TwitchEmbed from './TwitchEmbed';
@@ -23,20 +23,25 @@ const Canvas = () => {
         { id: 2, position: { x: 200, y: 150 }, label: "New Item 2", text: "Item 2", url: "https://placehold.co/150x150", mediaType: 'image' },
         { id: 3, position: { x: 350, y: 250 }, label: "New Item 3", text: "Item 3", url: "", mediaType: 'empty' },
     ]);
+    const cardsRef = useRef(cards)
 
-    // handle the movement of items during mouse-dragging
+    useEffect(() => {
+        cardsRef.current = cards
+    }, [cards])
+
+    // handle the movement of cards during mouse-dragging
     const handleDragMove = (event: DragMoveEvent) => {
         const { active, delta } = event
 
-        // find the starting position of the item being dragged
-        const card = cards.find(i => i.id === active.id)
+        // find the id of the card being dragged
+        const currentCard = cardsRef.current.find(card => card.id === active.id)
 
-        if (card) {
+        if (currentCard) {
             // emit the movement to other clients
             emitChange(active.id, {
                 position: {
-                    x: card.position.x + delta.x,
-                    y: card.position.y + delta.y
+                    x: currentCard.position.x + delta.x,
+                    y: currentCard.position.y + delta.y
                 }
             })
         }
