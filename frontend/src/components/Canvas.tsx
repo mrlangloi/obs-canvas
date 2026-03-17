@@ -1,7 +1,8 @@
 import { DndContext, type DragEndEvent, type DragMoveEvent } from '@dnd-kit/core';
 import { restrictToParentElement } from '@dnd-kit/modifiers';
 import throttle from 'lodash/throttle';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import { useCards } from '../contexts/CardContext';
 import './Canvas.modules.css';
 import Card, { type CardItem } from './Card';
 import TwitchEmbed from './TwitchEmbed';
@@ -17,17 +18,8 @@ const emitChange = throttle((id: number, attributes: Partial<CardItem>) => {
 
 const Canvas = () => {
 
-    // test elements
-    const [cards, setCards] = useState<CardItem[]>([
-        { id: 1, position: { x: 50, y: 50 }, label: "New Item 1", text: "Item 1", url: "https://placehold.co/150x150", mediaType: 'image' },
-        { id: 2, position: { x: 200, y: 150 }, label: "New Item 2", text: "Item 2", url: "https://placehold.co/150x150", mediaType: 'image' },
-        { id: 3, position: { x: 350, y: 250 }, label: "New Item 3", text: "Item 3", url: "", mediaType: 'empty' },
-    ]);
-    const cardsRef = useRef(cards)
-
-    useEffect(() => {
-        cardsRef.current = cards
-    }, [cards])
+    // import from context
+    const { cards, cardsRef, setCards } = useCards()
 
     // handle the movement of cards during mouse-dragging
     const handleDragMove = (event: DragMoveEvent) => {
