@@ -1,7 +1,8 @@
-import React from 'react';
-import { useDraggable } from '@dnd-kit/core';
-import { CSS } from '@dnd-kit/utilities';
-import SmartMedia from './SmartMedia';
+import { useDraggable } from '@dnd-kit/core'
+import { CSS } from '@dnd-kit/utilities'
+import React from 'react'
+import { useCards } from '../contexts/CardContext'
+import SmartMedia from './SmartMedia'
 
 interface Position {
     x: number
@@ -25,6 +26,10 @@ interface Props {
 }
 
 const Card: React.FC<Props> = ({ card }) => {
+    const { activeCardID, setActiveCardID } = useCards()
+
+    const isSelected = activeCardID === card.id
+
     const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
         id: card.id,
     })
@@ -52,17 +57,25 @@ const Card: React.FC<Props> = ({ card }) => {
         // transform during mouse-drag
         transform: CSS.Translate.toString(transform),
 
+        rotate: `${card.rotation}deg`,
+
         // zIndex: isDragging ? 999 : 1,
         // opacity: isDragging ? 0.8 : 1,
         cursor: isDragging ? 'grabbing' : 'grab',
         padding: '8px',
-        border: '1px solid white',
+        border: isSelected ? '1px solid green' : '1px solid red',
         color: 'white',
         userSelect: 'none',
     }
 
     return (
-        <div ref={setNodeRef} style={style} {...listeners} {...attributes}>
+        <div 
+            ref={setNodeRef} 
+            style={style} 
+            {...listeners} 
+            {...attributes}
+            onMouseDown={() => {setActiveCardID(card.id); console.log('clicked card', card.id);}}
+        >
             {card.text}
             {card.mediaType !== 'empty' ? <SmartMedia src={card.url} type={card.mediaType} /> : <></>}
         </div>
