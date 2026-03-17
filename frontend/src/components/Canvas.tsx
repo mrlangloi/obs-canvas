@@ -1,7 +1,6 @@
 import { DndContext, type DragEndEvent, type DragMoveEvent } from '@dnd-kit/core';
 import { restrictToParentElement } from '@dnd-kit/modifiers';
 import throttle from 'lodash/throttle';
-import { useEffect, useRef } from 'react';
 import { useCards } from '../contexts/CardContext';
 import './Canvas.modules.css';
 import Card, { type CardItem } from './Card';
@@ -89,7 +88,10 @@ const Canvas = () => {
                 onDragEnd={handleDragEnd}
             >
                 {cards.map((card) => (
-                    <Card key={card.id} card={card} />
+                    <Card 
+                        key={card.id} 
+                        card={card} 
+                    />
                 ))}
             </DndContext>
 

@@ -13,6 +13,8 @@ some typings:
 interface CardContextType {
     cards: CardItem[]
     cardsRef: React.RefObject<CardItem[]>
+    activeCardID: number | null
+    setActiveCardID: (id: number | null) => void
     updateCard: (id: number, attributes: Partial<CardItem>) => void
     setCards: React.Dispatch<React.SetStateAction<CardItem[]>>
 }
@@ -27,6 +29,8 @@ export const CardProvider = ({ children }: { children: ReactNode }) => {
         { id: 2, position: { x: 200, y: 150 }, label: "New Item 2", text: "Item 2", url: "https://placehold.co/150x150", mediaType: 'image' },
         { id: 3, position: { x: 350, y: 250 }, label: "New Item 3", text: "Item 3", url: "", mediaType: 'empty' },
     ])
+
+    const [activeCardID, setActiveCardID] = useState<string | number | null>(null)
 
     const cardsRef = useRef<CardItem[]>(cards)
 
@@ -43,7 +47,7 @@ export const CardProvider = ({ children }: { children: ReactNode }) => {
     }
 
     return (
-        <CardContext.Provider value={{ cards, cardsRef, updateCard, setCards }}>
+        <CardContext.Provider value={{ cards, activeCardID, setActiveCardID, cardsRef, updateCard, setCards }}>
             {children}
         </CardContext.Provider>
     )
