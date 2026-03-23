@@ -49,19 +49,19 @@ const Card: React.FC<Props> = ({ card }) => {
         }
     }
 
-    const style: React.CSSProperties = {
+    const wrapperStyle: React.CSSProperties = {
         position: 'absolute',
         top: card.position.y,
         left: card.position.x,
-
         // transform during mouse-drag
         transform: CSS.Translate.toString(transform),
-
-        rotate: `${card.rotation}deg`,
-
         // zIndex: isDragging ? 999 : 1,
-        // opacity: isDragging ? 0.8 : 1,
         cursor: isDragging ? 'grabbing' : 'grab',
+    }
+
+    const contentStyle: React.CSSProperties = {
+        rotate: `${card.rotation}deg`,
+        // opacity: isDragging ? 0.8 : 1,
         padding: '8px',
         border: isSelected ? '1px solid green' : '1px solid red',
         color: 'white',
@@ -69,15 +69,18 @@ const Card: React.FC<Props> = ({ card }) => {
     }
 
     return (
-        <div 
-            ref={setNodeRef} 
-            style={style} 
-            {...listeners} 
+        <div
+            ref={setNodeRef}
+            style={wrapperStyle}
+            {...listeners}
             {...attributes}
-            onMouseDown={() => {setActiveCardID(card.id); console.log('clicked card', card.id);}}
+            onMouseDown={() => { setActiveCardID(card.id); console.log('clicked card', card.id); }}
         >
-            {card.text}
-            {card.mediaType !== 'empty' ? <SmartMedia src={card.url} type={card.mediaType} /> : <></>}
+            <div style={contentStyle}>
+                {card.text}
+                {card.mediaType !== 'empty' ? <SmartMedia src={card.url} type={card.mediaType} /> : <></>}
+            </div>
+
         </div>
     )
 }
