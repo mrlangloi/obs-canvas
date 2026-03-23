@@ -13,12 +13,24 @@ const ControlPanel = () => {
             <h2>Editing: {activeCard ? activeCard.label : 'None'}</h2>
             
             <div className="control-panel-controls">
+                <p>Position: ({activeCard?.position.x || 0}, {activeCard?.position.y || 0})</p>
+                
+                <p>Rotation: {activeCard?.rotation || 0}°</p>
                 <input
                     type="range"
                     min="-360"
                     max="360"
                     value={activeCard?.rotation || 0}
                     onChange={(e) => updateCard(activeCardID!, { rotation: parseInt(e.target.value) })}
+                />
+
+                <p>Opacity: {activeCard?.opacity || 100}%</p>
+                <input 
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={activeCard?.opacity || 100}
+                    onChange={(e) => updateCard(activeCardID!, { opacity: parseInt(e.target.value) })}
                 />
             </div>
             <button className="toggle-tab" onClick={() => setShowPanel(!showPanel)}>
