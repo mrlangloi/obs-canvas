@@ -49,6 +49,11 @@ const Card: React.FC<Props> = ({ card }) => {
         }
     }
 
+    /*
+        wrapperStyle handles the position during dragging
+        contentStyle handles the rotation, opacity, etc.
+        if not separated, dragging with rotation applied moves the card with respect to the rotated axes
+    */
     const wrapperStyle: React.CSSProperties = {
         position: 'absolute',
         top: card.position.y,
