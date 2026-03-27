@@ -10,7 +10,7 @@ interface Position {
 }
 
 export interface CardItem {
-    id: number
+    id: string
     position: Position
     label: string
     text: string

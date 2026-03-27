@@ -13,9 +13,9 @@ some typings:
 interface CardContextType {
     cards: CardItem[]
     cardsRef: React.RefObject<CardItem[]>
-    activeCardID: number | null
-    setActiveCardID: (id: number | null) => void
-    updateCard: (id: number, attributes: Partial<CardItem>) => void
+    activeCardID: string | null
+    setActiveCardID: (id: string | null) => void
+    updateCard: (id: string, attributes: Partial<CardItem>) => void
     setCards: React.Dispatch<React.SetStateAction<CardItem[]>>
 }
 
@@ -25,12 +25,12 @@ export const CardProvider = ({ children }: { children: ReactNode }) => {
 
     // placeholder data
     const [cards, setCards] = useState<CardItem[]>([
-        { id: 1, position: { x: 50, y: 50 }, label: "New Item 1", text: "Item 1", url: "https://placehold.co/150x150", mediaType: 'image' },
-        { id: 2, position: { x: 200, y: 150 }, label: "New Item 2", text: "Item 2", url: "https://placehold.co/150x150", mediaType: 'image' },
-        { id: 3, position: { x: 350, y: 250 }, label: "New Item 3", text: "Item 3", url: "", mediaType: 'empty' },
+        { id: "1", position: { x: 50, y: 50 }, label: "New Item 1", text: "Item 1", url: "https://placehold.co/150x150", mediaType: 'image' },
+        { id: "2", position: { x: 200, y: 150 }, label: "New Item 2", text: "Item 2", url: "https://placehold.co/150x150", mediaType: 'image' },
+        { id: "3", position: { x: 350, y: 250 }, label: "New Item 3", text: "Item 3", url: "", mediaType: 'empty' },
     ])
 
-    const [activeCardID, setActiveCardID] = useState<string | number | null>(null)
+    const [activeCardID, setActiveCardID] = useState<string | null>(null)
 
     const cardsRef = useRef<CardItem[]>(cards)
 
@@ -40,7 +40,7 @@ export const CardProvider = ({ children }: { children: ReactNode }) => {
     }, [cards])
 
     // centralized update function for both mouse-dragging and control panel changes
-    const updateCard = (id: number, attributes: Partial<CardItem>) => {
+    const updateCard = (id: string, attributes: Partial<CardItem>) => {
         setCards((prev) =>
             prev.map((card) => (card.id === id ? { ...card, ...attributes } : card))
         )
