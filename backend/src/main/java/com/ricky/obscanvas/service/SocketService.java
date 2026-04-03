@@ -36,7 +36,7 @@ public class SocketService {
 
             // broadcast the data to everyone else so their canvas updates
             // .sendEvent(eventName, data)
-            server.getBroadcastOperations().sendEvent("card_moved", data);
+            // server.getBroadcastOperations().sendEvent("card_moved", data);
         });
     }
 
