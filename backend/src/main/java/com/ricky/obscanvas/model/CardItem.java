@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.ricky.obscanvas.model;
 
 /*
  * using records, getters are auto-generated

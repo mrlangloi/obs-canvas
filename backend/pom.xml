@@ -11,9 +11,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>com.example</groupId>
+	<groupId>com.ricky</groupId>
 
-	<artifactId>demo</artifactId>
+	<artifactId>obscanvas</artifactId>
 
 	<version>0.0.1-SNAPSHOT</version>
 

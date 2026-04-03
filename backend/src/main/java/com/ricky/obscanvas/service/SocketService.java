@@ -1,7 +1,7 @@
-package com.example.demo.service;
+package com.ricky.obscanvas.service;
 
 import com.corundumstudio.socketio.SocketIOServer;
-import com.example.demo.model.CardItem;
+import com.ricky.obscanvas.model.CardItem;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;

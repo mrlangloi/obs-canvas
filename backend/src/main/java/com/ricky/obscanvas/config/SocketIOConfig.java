@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.ricky.obscanvas.config;
 
 import com.corundumstudio.socketio.SocketIOServer;
 import org.springframework.context.annotation.Bean;
