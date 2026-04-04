@@ -38,6 +38,12 @@ public class SocketService {
             // .sendEvent(eventName, data)
             // server.getBroadcastOperations().sendEvent("card_moved", data);
         });
+
+        this.server.addEventListener("card_save", CardItem.class, (client, data, ackSender) -> {
+            // log the final position for debugging
+            System.out.println("Card " + data.id() + " saved at: (" + data.position().x() + ", " + data.position().y() + ")");
+        });
+
     }
 
     @PostConstruct
