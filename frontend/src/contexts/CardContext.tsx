@@ -49,7 +49,7 @@ export const CardProvider = ({ children }: { children: ReactNode }) => {
         if (!socket)
             return
 
-        socket.on("card_update", (updatedCard: CardItem, senderId: string) => {
+        socket.on("card_updated", (updatedCard: CardItem, senderId: string) => {
             // ignore updates from the same client to prevent feedback loops
             if (senderId === socket.id)
                 return
@@ -60,7 +60,7 @@ export const CardProvider = ({ children }: { children: ReactNode }) => {
         })
 
         return () => {
-            socket.off("card_update")
+            socket.off("card_updated")
         }
     }, [socket])
 
@@ -68,7 +68,7 @@ export const CardProvider = ({ children }: { children: ReactNode }) => {
     const throttledEmit = useRef(
         throttle((card: CardItem) => {
             socket.emit("card_update", card);
-        }, 16) // ~60 updates per second
+        }, 17) // ~60 updates per second;
     ).current
 
     /*
