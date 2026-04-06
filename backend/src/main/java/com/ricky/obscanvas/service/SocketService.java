@@ -34,9 +34,10 @@ public class SocketService {
             // log the movement for debugging
             System.out.println("Card " + data.id() + " moved to: (" + data.position().x() + ", " + data.position().y() + ")");
 
-            // broadcast the data to everyone else so their canvas updates
-            // .sendEvent(eventName, data)
-            // server.getBroadcastOperations().sendEvent("card_moved", data);
+            // broadcast the data to everyone (except the sender) so their canvas updates
+            client.getNamespace().getBroadcastOperations().sendEvent("card_updated", client, data);
+            // to send to everyone including the sender, use server instead of client
+            // server.getBroadcastOperations().sendEvent("card_updated", data);
         });
 
         this.server.addEventListener("card_save", CardItem.class, (client, data, ackSender) -> {
