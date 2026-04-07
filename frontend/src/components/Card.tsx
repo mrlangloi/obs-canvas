@@ -73,13 +73,20 @@ const Card: React.FC<Props> = ({ card }) => {
         userSelect: 'none',
     }
 
+    const handleMouseDown = () => {
+        if (isSelected) 
+            return
+
+        setActiveCardID(card.id)
+    }
+
     return (
         <div
             ref={setNodeRef}
             style={wrapperStyle}
             {...listeners}
             {...attributes}
-            onMouseDown={() => { setActiveCardID(card.id); console.log('clicked card', card.id); }}
+            onMouseDown={handleMouseDown}
         >
             <div style={contentStyle}>
                 {card.text}
