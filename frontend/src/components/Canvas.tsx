@@ -13,13 +13,14 @@ const Canvas = () => {
     // handle the movement of cards during mouse-dragging
     const handleDragMove = (event: DragMoveEvent) => {
         const { active, delta } = event
+        const id = active.id.toString()
 
         // find the id of the card being dragged
-        const currentCard = cardsRef.current.find(card => card.id === active.id)
+        const currentCard = cardsRef.current[id]
 
         if (currentCard) {
             // emit the movement to other clients
-            updateCardDragOnly(active.id.toString(), {
+            updateCardDragOnly(id, {
                 position: {
                     x: currentCard.position.x + delta.x,
                     y: currentCard.position.y + delta.y
@@ -31,13 +32,18 @@ const Canvas = () => {
     // handle the end of dragging to save the final position to the database
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, delta } = event
+        
+        // if there was no movement, do nothing
+        if (delta.x === 0 && delta.y === 0)
+            return
 
         // find the id of the card being dragged
-        const currentCard = cardsRef.current.find(card => card.id === active.id)
+        const id = active.id.toString()
+        const currentCard = cardsRef.current[id]
 
         if (currentCard) {
             // emit the movement to other clients
-            updateCard(active.id.toString(), {
+            updateCard(id, {
                 position: {
                     x: currentCard.position.x + delta.x,
                     y: currentCard.position.y + delta.y
@@ -46,17 +52,6 @@ const Canvas = () => {
         }
     }
 
-    // generic function to update other attributes like rotation, opacity, zIndex, etc. in the future
-    // const updateItemAttribute = (id: number, attributes: Partial<CardItem>) => {
-    //     // update local state
-    //     setCards(prev => prev.map(card =>
-    //         card.id === id ? { ...card, ...attributes } : card
-    //     ))
-
-    //     // emit the changes to other clients
-    //     emitChange(id, attributes)
-    // }
-
     return (
         <main className="main-canvas">
             <DndContext
@@ -64,7 +59,7 @@ const Canvas = () => {
                 onDragMove={handleDragMove}
                 onDragEnd={handleDragEnd}
             >
-                {cards.map((card) => (
+                {Object.values(cards).map((card) => (
                     <Card 
                         key={card.id} 
                         card={card} 
