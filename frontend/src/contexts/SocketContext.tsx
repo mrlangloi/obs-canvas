@@ -1,5 +1,5 @@
 // SocketContext.tsx
-import React, { createContext, useContext, type ReactNode, useEffect, useRef } from 'react'
+import { createContext, useContext, type ReactNode, useEffect, useRef } from 'react'
 import { io, Socket } from 'socket.io-client'
 
 const SocketContext = createContext<Socket | undefined>(undefined)

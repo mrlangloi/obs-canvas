@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useCards } from '../contexts/CardContext'
-import type { CardItem } from './Card'
 import PositionDisplay from './PositionDisplay'
 
 const ControlPanel = () => {
     // may need cards variable later
-    const { cards, activeCardRef, activeCardID, cardsRef, updateCard } = useCards()
+    const { cards, activeCardID, updateCard } = useCards()
 
     const [showPanel, setShowPanel] = useState(true)
 

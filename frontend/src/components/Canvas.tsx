@@ -2,7 +2,7 @@ import { DndContext, type DragEndEvent, type DragMoveEvent } from '@dnd-kit/core
 import { restrictToParentElement } from '@dnd-kit/modifiers'
 import { useCards } from '../contexts/CardContext'
 import './Canvas.modules.css'
-import Card, { type CardItem } from './Card'
+import Card from './Card'
 import TwitchEmbed from './TwitchEmbed'
 
 const Canvas = () => {

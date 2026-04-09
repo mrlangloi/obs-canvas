@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useCards } from '../contexts/CardContext'
 
 const PositionDisplay = ({ cardID }: { cardID: string | null }) => {

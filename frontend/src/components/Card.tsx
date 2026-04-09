@@ -34,20 +34,20 @@ const Card: React.FC<Props> = ({ card }) => {
         id: card.id,
     })
 
-    const getMediaType = (url: string) => {
-        const extension = url.split('.').pop()?.toLowerCase();
-        if (extension) {
-            const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'avif'];
-            const videoExtensions = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv'];
-            if (imageExtensions.includes(extension)) {
-                return 'image';
-            } else if (videoExtensions.includes(extension)) {
-                return 'video';
-            } else {
-                return 'empty';
-            }
-        }
-    }
+    // const getMediaType = (url: string) => {
+    //     const extension = url.split('.').pop()?.toLowerCase();
+    //     if (extension) {
+    //         const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'avif'];
+    //         const videoExtensions = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'mkv'];
+    //         if (imageExtensions.includes(extension)) {
+    //             return 'image';
+    //         } else if (videoExtensions.includes(extension)) {
+    //             return 'video';
+    //         } else {
+    //             return 'empty';
+    //         }
+    //     }
+    // }
 
     /*
         wrapperStyle handles the position during dragging
