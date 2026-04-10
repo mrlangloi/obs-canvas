@@ -6,7 +6,7 @@ const SocketContext = createContext<Socket | undefined>(undefined)
 
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
     // useRef ensures the socket instance is stable across re-renders
-    const socket = useRef(io("http://localhost:5174"))
+    const socket = useRef(io(import.meta.env.VITE_API_URL))
 
     useEffect(() => {
         const s = socket.current
