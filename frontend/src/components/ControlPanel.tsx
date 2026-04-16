@@ -1,10 +1,15 @@
 import { useState } from 'react'
-import { useCards } from '../contexts/CardContext'
+import { useSocket } from '../contexts/SocketContext'
+import useCardStore from '../store/useCardStore'
 import PositionDisplay from './PositionDisplay'
 
 const ControlPanel = () => {
-    // may need cards variable later
-    const { cards, activeCardID, updateCard } = useCards()
+    
+    // import from context and store
+    const socket = useSocket()
+    const cards = useCardStore((state) => state.cards)
+    const activeCardID = useCardStore((state) => state.activeCardID)
+    const updateCard = useCardStore((state) => state.updateCard)
 
     const [showPanel, setShowPanel] = useState(true)
 
@@ -23,7 +28,13 @@ const ControlPanel = () => {
                     min="-360"
                     max="360"
                     value={activeCard?.rotation || 0}
-                    onChange={(e) => updateCard(activeCardID!, { rotation: parseInt(e.target.value) })}
+                    onChange={(e) => 
+                        updateCard(
+                            activeCardID!, 
+                            { rotation: parseInt(e.target.value) }, 
+                            socket
+                        )
+                    }
                 />
 
                 <p>Opacity: {activeCard?.opacity || 100}%</p>
@@ -32,7 +43,13 @@ const ControlPanel = () => {
                     min="0"
                     max="100"
                     value={activeCard?.opacity || 100}
-                    onChange={(e) => updateCard(activeCardID!, { opacity: parseInt(e.target.value) })}
+                    onChange={(e) => 
+                        updateCard(
+                            activeCardID!, 
+                            { opacity: parseInt(e.target.value) }, 
+                            socket
+                        )
+                    }
                 />
             </div>
             <button className="toggle-tab" onClick={() => setShowPanel(!showPanel)}>
