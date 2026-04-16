@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 
 interface SmartMediaProps {
     src: string;
-    type: 'image' | 'video';
+    mediaType: string;
 }
 
-const SmartMedia: React.FC<SmartMediaProps> = ({ src, type }) => {
+const SmartMedia: React.FC<SmartMediaProps> = ({ src, mediaType }) => {
     const [isVisible, setIsVisible] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -34,7 +34,7 @@ const SmartMedia: React.FC<SmartMediaProps> = ({ src, type }) => {
     return (
         <div ref={containerRef} style={{ minHeight: '150px', width: '100%', background: '#222' }}>
             {isVisible ? (
-                type === 'video' ? (
+                mediaType === 'video' ? (
                     <video
                         src={src}
                         muted
