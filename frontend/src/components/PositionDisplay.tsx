@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useCards } from '../contexts/CardContext'
+import useCardStore from '../store/useCardStore'
 
 const PositionDisplay = ({ cardID }: { cardID: string | null }) => {
-    const { cards, activeCardRef, cardsRef } = useCards()
+    
+    const cardsRef = useCardStore((state) => state.cardsRef)
     const [displayPos, setDisplayPos] = useState({ x: 0, y: 0 })
 
     /*
@@ -14,28 +15,21 @@ const PositionDisplay = ({ cardID }: { cardID: string | null }) => {
         let frameID: number
 
         const sync = () => {
-            if (!cardID) {
-                setDisplayPos({ x: 0, y: 0 })
-                return
-            } else if (activeCardRef.current && activeCardRef.current.id === cardID) {
-                // use the activeCardRef for the most responsive position updates during dragging
-                setDisplayPos(activeCardRef.current.position)
-            } else {
-                // if someone else is dragging, use cardsRef to get the latest position
+            if (cardID && cardsRef.current) {
                 const card = cardsRef.current[cardID]
-                
                 if (card) {
-                    setDisplayPos(card.position)
+                    setDisplayPos({
+                        x: Math.round(card.position.x),
+                        y: Math.round(card.position.y)
+                    })
                 }
             }
-
             frameID = requestAnimationFrame(sync)
         }
 
         frameID = requestAnimationFrame(sync)
-
         return () => cancelAnimationFrame(frameID)
-    }, [cardID, cards, cardsRef, activeCardRef])
+    }, [cardID, cardsRef])
     // including 'cards' ensures that when the socket calls setCards, acknowledge the data change
 
     return (

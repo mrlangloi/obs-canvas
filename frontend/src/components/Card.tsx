@@ -1,38 +1,28 @@
 import { useDraggable } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
 import React from 'react'
-import { useCards } from '../contexts/CardContext'
+import useCardStore from '../store/useCardStore'
 import SmartMedia from './SmartMedia'
 
-interface Position {
-    x: number
-    y: number
-}
-
-export interface CardItem {
-    id: string
-    position: Position
-    label: string
-    text: string
-    url: string
-    mediaType: 'image' | 'video' | 'empty'
-    rotation?: number
-    opacity?: number
-    zIndex?: number
-}
-
 interface Props {
-    card: CardItem
+    id: string
 }
 
-const Card: React.FC<Props> = ({ card }) => {
-    const { activeCardID, setActiveCardID } = useCards()
+const Card: React.FC<Props> = ({ id }) => {
+
+    // import from store
+    const card = useCardStore((state) => state.cards[id])
+    const activeCardID = useCardStore((state) => state.activeCardID)
+    const setActiveCardID = useCardStore((state) => state.setActiveCardID)
 
     const isSelected = activeCardID === card.id
 
     const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
         id: card.id,
     })
+
+    if (!card)
+        return null
 
     // const getMediaType = (url: string) => {
     //     const extension = url.split('.').pop()?.toLowerCase();
@@ -90,7 +80,7 @@ const Card: React.FC<Props> = ({ card }) => {
         >
             <div style={contentStyle}>
                 {card.text}
-                {card.mediaType !== 'empty' ? <SmartMedia src={card.url} type={card.mediaType} /> : <></>}
+                {card.mediaType !== 'empty' ? <SmartMedia src={card.url} mediaType={card.mediaType} /> : <></>}
             </div>
 
         </div>
