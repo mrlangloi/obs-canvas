@@ -6,15 +6,26 @@ import useCardStore from '../store/useCardStore'
 import './Canvas.modules.css'
 import Card from './Card'
 import TwitchEmbed from './TwitchEmbed'
+import { useEffect } from 'react'
 
 const Canvas = () => {
 
     // import from context and store
     const socket = useSocket()
     const cardIDs = useCardStore(useShallow((state) => Object.keys(state.cards)))
+    const handleRemoteCardUpdate = useCardStore((state) => state.handleRemoteCardUpdate)
     const updateCardDragOnly = useCardStore((state) => state.updateCardDragOnly)
     const updateCard = useCardStore((state) => state.updateCard)
 
+    // listen for real-time card updates from the server
+    useEffect(() => {
+        socket.on("card_updated", handleRemoteCardUpdate)
+
+        return () => {
+            socket.off("card_updated", handleRemoteCardUpdate)
+        }
+    }, [socket, handleRemoteCardUpdate])
+    
     // handle the movement of cards during mouse-dragging
     const handleDragMove = (event: DragMoveEvent) => {
         const { active, delta } = event
