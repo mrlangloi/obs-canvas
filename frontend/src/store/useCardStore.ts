@@ -25,6 +25,7 @@ interface CardState {
     setActiveCardID: (id: string | null) => void,
     updateCardDragOnly: (id: string, attributes: Partial<CardItem>, socket: Socket) => void,
     updateCard: (id: string, attributes: Partial<CardItem>, socket: Socket, isFinal?: boolean) => void,
+    handleRemoteCardUpdate: (updatedCard: CardItem) => void
 }
 
 // limit the frequency of updates for better performance (~60fps)
@@ -88,6 +89,20 @@ const useCardStore = create<CardState>((set, get) => ({
             throttledEmit(socket, updatedCard)
         }
     },
+
+    handleRemoteCardUpdate: (updatedCard: CardItem) => {
+        const { id } = updatedCard
+
+        const state = get()
+        state.cardsRef.current[id] = updatedCard
+
+        set((state) => ({
+            cards: {
+                ...state.cards,
+                [id]: updatedCard
+            }
+        }))
+    }
 
 }))
 
