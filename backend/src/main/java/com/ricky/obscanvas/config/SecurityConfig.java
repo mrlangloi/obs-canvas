@@ -1,6 +1,8 @@
 package com.ricky.obscanvas.config;
 
 import java.util.Arrays;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +13,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.ricky.obscanvas.service.TwitchOAuth2UserService;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -20,20 +24,27 @@ public class SecurityConfig {
     @Value("${app.frontend.url}")
     private String frontendURL;
 
+    @Autowired
+    private TwitchOAuth2UserService twitchOAuth2UserService;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .cors(withDefaults()) // uses the corsConfigurationSource bean below
-            .csrf(csrf -> csrf.disable()) // disabled for easier local development with React
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/user").permitAll() // allows checking login status
-                .anyRequest().authenticated()
-            )
-            .oauth2Login(oauth2 -> oauth2
-                // redirects back to frontend (port 5173) after Twitch login
-                .defaultSuccessUrl(frontendURL, true)
-            );
-        
+                .cors(withDefaults()) // uses the corsConfigurationSource bean below
+                .csrf(csrf -> csrf.disable()) // disabled for easier local development with React
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/user").permitAll() // allows checking login status
+                        .anyRequest().authenticated())
+                // .oauth2Login(oauth2 -> oauth2
+                // // redirects back to frontend (port 5173) after Twitch login
+                // .defaultSuccessUrl(frontendURL, true)
+                // );
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(twitchOAuth2UserService)
+                        )
+                        .defaultSuccessUrl(frontendURL, true));
+
         return http.build();
     }
 
@@ -43,7 +54,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(frontendURL));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
-        configuration.setAllowCredentials(true); 
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
