@@ -1,4 +1,4 @@
-import { create} from 'zustand'
+import { create } from 'zustand'
 import type { CardItem } from '../types/card'
 import { throttle } from 'lodash'
 import type { Socket } from 'socket.io-client'
