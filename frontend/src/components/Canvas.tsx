@@ -6,7 +6,7 @@ import useCardStore from '../store/useCardStore'
 import './Canvas.modules.css'
 import Card from './Card'
 import TwitchEmbed from './TwitchEmbed'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 
 const Canvas = () => {
 
@@ -27,7 +27,7 @@ const Canvas = () => {
     }, [socket, handleRemoteCardUpdate])
     
     // handle the movement of cards during mouse-dragging
-    const handleDragMove = (event: DragMoveEvent) => {
+    const handleDragMove = useCallback((event: DragMoveEvent) => {
         const { active, delta } = event
         const id = active.id.toString()
 
@@ -43,10 +43,10 @@ const Canvas = () => {
                 }
             }, socket)
         }
-    }
+    }, [updateCardDragOnly, socket])
 
     // handle the end of dragging to save the final position to the database
-    const handleDragEnd = (event: DragEndEvent) => {
+    const handleDragEnd = useCallback((event: DragEndEvent) => {
         const { active, delta } = event
         
         // if there was no movement, do nothing
@@ -66,7 +66,7 @@ const Canvas = () => {
                 }
             }, socket, true) // true indicates this is the final update after dragging ends
         }
-    }
+    }, [updateCard, socket])
 
     return (
         <main className="main-canvas">
