@@ -2,24 +2,42 @@ import { create } from 'zustand'
 import type { TwitchUser } from '../types/twitchUser'
 
 interface AuthState {
+    isLoggedIn: boolean;
     user: TwitchUser | null;
-    isAuthenticated: boolean;
     setUser: (user: TwitchUser | null) => void;
     logout: () => void;
 }
 
 const useAuthStore = create<AuthState>((set) => ({
-    user: null,
-    isAuthenticated: false,
+    isLoggedIn: false,
+    user: {
+            id: '',
+            display_name: '',
+            profile_image_url: '',
+            isAuthorized: false,
+            moderatedChannels: []
+        },
 
     setUser: (user) => set({
-        user: user,
-        isAuthenticated: !!user // converts user to boolean: null -> false, object -> true
+        isLoggedIn: user?.id ? true : false,
+        user: {
+            id: user?.id || '',
+            display_name: user?.display_name || '',
+            profile_image_url: user?.profile_image_url || '',
+            isAuthorized: user?.isAuthorized || false,
+            moderatedChannels: user?.moderatedChannels || []
+        }
     }),
 
     logout: () => set({
-        user: null,
-        isAuthenticated: false
+        isLoggedIn: false,
+        user: {
+            id: '',
+            display_name: '',
+            profile_image_url: '',
+            isAuthorized: false,
+            moderatedChannels: []
+        }
     }),
 }))
 
