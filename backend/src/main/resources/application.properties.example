@@ -9,7 +9,7 @@ app.frontend.url=http://localhost:5173
 # twitch registration details
 spring.security.oauth2.client.registration.twitch.client-id=
 spring.security.oauth2.client.registration.twitch.client-secret=
-spring.security.oauth2.client.registration.twitch.scope=user:read:email
+spring.security.oauth2.client.registration.twitch.scope=user:read:moderated_channels
 spring.security.oauth2.client.registration.twitch.authorization-grant-type=authorization_code
 spring.security.oauth2.client.registration.twitch.redirect-uri={baseUrl}/login/oauth2/code/{registrationId}
 spring.security.oauth2.client.registration.twitch.client-name=Twitch
@@ -25,3 +25,4 @@ spring.security.oauth2.client.provider.twitch.jwk-set-uri=https://id.twitch.tv/o
 
 # enable debug logging for Spring Security to troubleshoot authentication issues
 # logging.level.org.springframework.security=DEBUG
+spring.output.ansi.enabled=ALWAYS
