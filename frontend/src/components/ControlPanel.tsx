@@ -13,9 +13,6 @@ const ControlPanel = () => {
     const isAuthorized = useAuthStore((state) => state.user?.isAuthorized)
     const logout = useAuthStore((state) => state.logout)
 
-    // card store
-    const activeCardID = useCardStore((state) => state.activeCardID)
-
     const [showPanel, setShowPanel] = useState(true)
 
     useEffect(() => {
