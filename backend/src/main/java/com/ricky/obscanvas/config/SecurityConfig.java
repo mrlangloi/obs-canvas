@@ -35,14 +35,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/user").permitAll() // allows checking login status
                         .anyRequest().authenticated())
-                // .oauth2Login(oauth2 -> oauth2
-                // // redirects back to frontend (port 5173) after Twitch login
-                // .defaultSuccessUrl(frontendURL, true)
-                // );
                 .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo
-                                .userService(twitchOAuth2UserService)
-                        )
+                        .userInfoEndpoint(userInfo -> userInfo.userService(twitchOAuth2UserService))
                         .defaultSuccessUrl(frontendURL, true));
 
         return http.build();
