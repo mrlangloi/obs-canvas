@@ -1,27 +1,28 @@
-import { useState } from 'react'
-import { useSocket } from '../contexts/SocketContext'
+import { useEffect, useState } from 'react'
+
 import useAuthStore from '../store/useAuthStore'
 import useCardStore from '../store/useCardStore'
-import PositionDisplay from './PositionDisplay'
+import ControlPanelControls from './ControlPanelControls'
+
 
 const ControlPanel = () => {
 
-    // socket context
-    const socket = useSocket()
-
     // auth store
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
     const user = useAuthStore((state) => state.user)
-    const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+    const isAuthorized = useAuthStore((state) => state.user?.isAuthorized)
     const logout = useAuthStore((state) => state.logout)
 
     // card store
-    const cards = useCardStore((state) => state.cards)
     const activeCardID = useCardStore((state) => state.activeCardID)
-    const updateCard = useCardStore((state) => state.updateCard)
 
     const [showPanel, setShowPanel] = useState(true)
 
-    const activeCard = activeCardID ? cards[activeCardID] : null
+    useEffect(() => {
+        if (isLoggedIn) {
+            console.log("Twitch login data:", user);
+        }
+    }, [isLoggedIn, user])
 
     const handleLogin = () => {
         // redirect to the backend's twitch auth endpoint
@@ -31,58 +32,19 @@ const ControlPanel = () => {
 
     return (
         <aside className={`control-panel ${!showPanel ? 'hidden' : ''}`}>
-            <h2 className="control-panel-title">Control Panel</h2>
-
-            <h2>Editing: {activeCard ? activeCard.label : 'None'}</h2>
-
-            <div className="control-panel-controls">
-                <p>Position: <PositionDisplay cardID={activeCardID} /></p>
-
-                <p>Rotation: {activeCard?.rotation || 0}°</p>
-                <input
-                    type="range"
-                    min="-360"
-                    max="360"
-                    value={activeCard?.rotation || 0}
-                    onChange={(e) =>
-                        updateCard(
-                            activeCardID!,
-                            { rotation: parseInt(e.target.value) },
-                            socket
-                        )
-                    }
-                />
-
-                <p>Opacity: {activeCard?.opacity || 100}%</p>
-                <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={activeCard?.opacity || 100}
-                    onChange={(e) =>
-                        updateCard(
-                            activeCardID!,
-                            { opacity: parseInt(e.target.value) },
-                            socket
-                        )
-                    }
-                />
-            </div>
-            <button className="toggle-tab" onClick={() => setShowPanel(!showPanel)}>
-                {showPanel ? '◀' : '▶'}
-            </button>
-            
             {/* twitch login/logout */}
-            {isAuthenticated ? (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <span>Welcome, {user?.display_name}</span>
-                    {user?.profile_image_url && (
-                        <img
-                            src={user.profile_image_url}
-                            alt="Avatar"
-                            style={{ width: '32px', borderRadius: '50%' }}
-                        />
-                    )}
+            {isLoggedIn ? (
+                <div className="twitch-user">
+                    <div className="twitch-user-profile">
+                        {user?.profile_image_url && (
+                            <img
+                                src={user.profile_image_url}
+                                alt="Avatar"
+                                style={{ width: '32px', borderRadius: '50%' }}
+                            />
+                        )}
+                        <span>{user?.display_name}</span>
+                    </div>
                     <button onClick={logout}>Logout</button>
                 </div>
             ) : (
@@ -90,6 +52,22 @@ const ControlPanel = () => {
                     Login with Twitch
                 </button>
             )}
+
+            <h2 className="control-panel-title">Control Panel</h2>
+
+            {isAuthorized ? (
+                <ControlPanelControls />
+            ) : (
+                <p>
+                    This account is not authorized to use this app. Please log in with a Twitch account that has moderator privileges in the current Twitch channel.
+                </p>
+            )}
+
+            <button className="toggle-tab" onClick={() => setShowPanel(!showPanel)}>
+                {showPanel ? '◀' : '▶'}
+            </button>
+
+
         </aside>
     )
 }
