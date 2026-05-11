@@ -11,6 +11,8 @@ export interface CardItem {
     url: string
     mediaType: string
     rotation?: number
+    width?: number
+    height?: number
     opacity?: number
     zIndex?: number
 }
