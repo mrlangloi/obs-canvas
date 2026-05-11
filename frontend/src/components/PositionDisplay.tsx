@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
 import useCardStore from '../store/useCardStore'
+import { useSocket } from '../contexts/SocketContext'
 
 const PositionDisplay = ({ cardID }: { cardID: string | null }) => {
     
+    const socket = useSocket()
+
+    const activeCardID = useCardStore((state) => state.activeCardID)
     const cardsRef = useCardStore((state) => state.cardsRef)
     const [displayPos, setDisplayPos] = useState({ x: 0, y: 0 })
+    const updateCard = useCardStore((state) => state.updateCard)
 
-    /*
-        continuously sync the displayed position with the actual position of the card
-        activeCardRef for when the user is dragging the card
-        cardsRef for when other users are dragging the card
-    */
+    // continuously sync the displayed position with the actual position of the card
     useEffect(() => {
         let frameID: number
 
@@ -30,10 +31,32 @@ const PositionDisplay = ({ cardID }: { cardID: string | null }) => {
         frameID = requestAnimationFrame(sync)
         return () => cancelAnimationFrame(frameID)
     }, [cardID, cardsRef])
-    // including 'cards' ensures that when the socket calls setCards, acknowledge the data change
+    // cardsRef needed in dependency array to ensure the latest reference is used
 
     return (
-        <>({displayPos.x}, {displayPos.y})</>
+        <>
+            (<input 
+                type="text" 
+                value={`(${displayPos.x})`}
+                onChange={(e) => updateCard(
+                    activeCardID!,
+                    { position: { x: parseInt(e.target.value), y: displayPos.y } },
+                    socket
+                )}
+            />
+            ,
+            <input 
+                type="text"
+                value={`(${displayPos.y})`}
+                onChange={(e) => updateCard(
+                    activeCardID!,
+                    { position: { x: displayPos.x, y: parseInt(e.target.value) } },
+                    socket
+                )}
+            />
+            {/* ({displayPos.x}, {displayPos.y}) */}
+            )
+        </>
     )
 }
 
