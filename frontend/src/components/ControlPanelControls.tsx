@@ -16,6 +16,26 @@ const ControlPanelControls = () => {
         return <p>No card selected. Click on a card to edit its properties</p>
     }
 
+    // centralized change handler for input fields
+    const handleChange = (e) => {
+        const { name, value } = e.target
+        updateCard(
+            activeCardID!,
+            { [name]: value },
+            socket
+        )
+    }
+
+    const handleSave = (e) => {
+        const { name, value } = e.target
+        updateCard(
+            activeCardID!,
+            { [name]: value },
+            socket,
+            true // `isFinal = true` to trigger database save
+        )
+    }
+
     return (
         <>
             <h2>Editing: {activeCard ? activeCard.label : 'None'}</h2>
@@ -29,13 +49,28 @@ const ControlPanelControls = () => {
                     min="-360"
                     max="360"
                     value={activeCard?.rotation || 0}
-                    onChange={(e) =>
-                        updateCard(
-                            activeCardID!,
-                            { rotation: parseInt(e.target.value) },
-                            socket
-                        )
-                    }
+                    onChange={handleChange}
+                    onMouseUp={handleSave}
+                />
+
+                <p>Width: </p>
+                <input
+                    type="range"
+                    min="1"
+                    max="1280"
+                    value="-1"
+                    onChange={handleChange}
+                    onMouseUp={handleSave}
+                />
+
+                <p>Height: </p>
+                <input
+                    type="range"
+                    min="1"
+                    max="720"
+                    value="-1"
+                    onChange={handleChange}
+                    onMouseUp={handleSave}
                 />
 
                 <p>Opacity: {activeCard?.opacity || 100}%</p>
@@ -44,14 +79,10 @@ const ControlPanelControls = () => {
                     min="0"
                     max="100"
                     value={activeCard?.opacity || 100}
-                    onChange={(e) =>
-                        updateCard(
-                            activeCardID!,
-                            { opacity: parseInt(e.target.value) },
-                            socket
-                        )
-                    }
+                    onChange={handleChange}
+                    onMouseUp={handleSave}
                 />
+
             </div>
         </>
     )
