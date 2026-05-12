@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import useAuthStore from '../store/useAuthStore'
 import ControlPanelControls from './ControlPanelControls'
+import './ControlPanel.modules.css'
 
 const ControlPanel = () => {
 
