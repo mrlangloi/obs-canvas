@@ -36,21 +36,23 @@ const PositionDisplay = ({ cardID }: { cardID: string | null }) => {
     return (
         <>
             (<input 
-                type="text" 
-                value={`(${displayPos.x})`}
+                className="number-input"
+                type="number" 
+                value={displayPos.x || 0}
                 onChange={(e) => updateCard(
                     activeCardID!,
-                    { position: { x: parseInt(e.target.value), y: displayPos.y } },
+                    { position: { x: parseInt(e.target.value) || 0, y: displayPos.y } },
                     socket
                 )}
             />
             ,
             <input 
-                type="text"
-                value={`(${displayPos.y})`}
+                className="number-input"
+                type="number"
+                value={displayPos.y || 0}
                 onChange={(e) => updateCard(
                     activeCardID!,
-                    { position: { x: displayPos.x, y: parseInt(e.target.value) } },
+                    { position: { x: displayPos.x, y: parseInt(e.target.value) || 0 } },
                     socket
                 )}
             />
