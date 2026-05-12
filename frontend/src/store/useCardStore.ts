@@ -35,9 +35,9 @@ const throttledEmit = throttle((socket, card) => {
 
 const useCardStore = create<CardState>((set, get) => ({
     cards: {
-        '1': { id: '1', position: { x: 50, y: 50 }, label: 'New Item 1', text: 'Item 1', url: 'https://placehold.co/150x150', mediaType: 'image' },
-        '2': { id: '2', position: { x: 200, y: 150 }, label: 'New Item 2', text: 'Item 2', url: 'https://placehold.co/150x150', mediaType: 'image' },
-        '3': { id: '3', position: { x: 350, y: 250 }, label: 'New Item 3', text: 'Item 3', url: '', mediaType: 'empty' },
+        '1': { id: '1', visible: true, position: { x: 50, y: 50 }, label: 'New Item 1', text: 'Item 1', url: 'https://placehold.co/150x150', mediaType: 'image' },
+        '2': { id: '2', visible: true, position: { x: 200, y: 150 }, label: 'New Item 2', text: '', url: 'https://placehold.co/150x150', mediaType: 'image' },
+        '3': { id: '3', visible: true, position: { x: 350, y: 250 }, label: 'New Item 3', text: 'Item 3', url: '', mediaType: 'empty' },
     },
     activeCardID: null,
     cardsRef: { current: {} },
@@ -62,16 +62,22 @@ const useCardStore = create<CardState>((set, get) => ({
         const currentCard = state.cards[id]
 
         // checks if the card exists before trying to update it
-        if (currentCard) {
-            const updatedCard = { ...currentCard, ...attributes }
-            state.cardsRef.current[id] = updatedCard
-            throttledEmit(socket, updatedCard)
-        }
+        if (!currentCard) return
+
+        const updatedCard = { ...currentCard, ...attributes }
+        state.cardsRef.current[id] = updatedCard
+        throttledEmit(socket, updatedCard)
+
     },
 
     // centralized update function for control panel changes
     // this function triggers re-renders, making it best for low-frequency updates
     updateCard: (id, attributes, socket, isFinal = false) => {
+        const state = get()
+        const currentCard = state.cards[id]
+
+        if (!currentCard) return
+
         set((state) => ({
             cards: {
                 ...state.cards,
@@ -83,6 +89,7 @@ const useCardStore = create<CardState>((set, get) => ({
         }))
 
         const updatedCard = get().cards[id]
+        state.cardsRef.current[id] = updatedCard
         if (isFinal) {
             socket.emit("card_save", updatedCard)
         } else {
