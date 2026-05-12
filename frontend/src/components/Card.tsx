@@ -24,6 +24,15 @@ const Card: React.FC<Props> = ({ id }) => {
     if (!card)
         return null
 
+    // 
+    const cardVisibility = () => {
+        if (card.visible) {
+            return "card"
+        } else {
+            return "card streamer-mode"
+        }
+    }
+
     // const getMediaType = (url: string) => {
     //     const extension = url.split('.').pop()?.toLowerCase();
     //     if (extension) {
@@ -56,8 +65,10 @@ const Card: React.FC<Props> = ({ id }) => {
 
     const contentStyle: React.CSSProperties = {
         rotate: `${card.rotation}deg`,
-        // opacity: isDragging ? 0.8 : 1,
-        padding: '8px',
+        width: `${card.width === -1 ? 'auto' : card.width + 'px'}`,
+        height: `${card.height === -1 ? 'auto' : card.height + 'px'}`,
+        opacity: `${card.opacity}%`,
+        // padding: '8px',
         border: isSelected ? '1px solid green' : '1px solid red',
         color: 'white',
         userSelect: 'none',
@@ -79,7 +90,7 @@ const Card: React.FC<Props> = ({ id }) => {
             onMouseDown={handleMouseDown}
         >
             <div style={contentStyle}>
-                {card.text}
+                <p>{card.text}</p>
                 {card.mediaType !== 'empty' ? <SmartMedia src={card.url} mediaType={card.mediaType} /> : <></>}
             </div>
 
