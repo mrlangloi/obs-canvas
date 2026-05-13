@@ -3,6 +3,8 @@ import { useSocket } from '../contexts/SocketContext'
 import useCardStore from '../store/useCardStore'
 import PositionDisplay from './PositionDisplay'
 import type { CardItem } from '../types/card'
+import type { SliderItem } from '../types/slider'
+import Slider from './Slider'
 
 const ControlPanelControls = () => {
 
@@ -62,6 +64,49 @@ const ControlPanelControls = () => {
         }
     }
 
+    const sliders: SliderItem[] = [
+        {
+            name: 'rotation',
+            label: 'Rotation',
+            min: -360,
+            max: 360,
+            value: activeCard?.rotation || 0,
+            onChange: handleChange,
+            onMouseUp: handleSave,
+            onDoubleClick: handleReset
+        },
+        {
+            name: 'width',
+            label: 'Width',
+            min: 1,
+            max: 1280,
+            value: -1,
+            onChange: handleChange,
+            onMouseUp: handleSave,
+            onDoubleClick: handleReset
+        },
+        {
+            name: 'height',
+            label: 'Height',
+            min: 1,
+            max: 720,
+            value: -1,
+            onChange: handleChange,
+            onMouseUp: handleSave,
+            onDoubleClick: handleReset
+        },
+        {
+            name: 'opacity',
+            label: 'Opacity',
+            min: 0,
+            max: 100,
+            value: activeCard?.opacity || 100,
+            onChange: handleChange,
+            onMouseUp: handleSave,
+            onDoubleClick: handleReset
+        },
+    ]
+
     return (
         <>
             <h2>Editing: {activeCard ? activeCard.label : 'None'}</h2>
@@ -69,53 +114,14 @@ const ControlPanelControls = () => {
             <div className="control-panel-controls">
                 <p>Position: <PositionDisplay cardID={activeCardID} /></p>
 
-                <p>Rotation: {activeCard?.rotation || 0}°</p>
-                <input
-                    type="range"
-                    name="rotation"
-                    min="-360"
-                    max="360"
-                    value={activeCard?.rotation || 0}
-                    onChange={handleChange}
-                    onMouseUp={handleSave}
-                    onDoubleClick={handleReset}
-                />
+                {/* Slider controls */}
+                {sliders.map((slider) => (
+                    <Slider 
+                        key={slider.name} 
+                        prop={slider} 
+                    />
+                ))}
 
-                <p>Width: </p>
-                <input
-                    type="range"
-                    name="width"
-                    min="1"
-                    max="1280"
-                    value="-1"
-                    onChange={handleChange}
-                    onMouseUp={handleSave}
-                />
-
-                <p>Height: </p>
-                <input
-                    type="range"
-                    name="height"
-                    min="1"
-                    max="720"
-                    value="-1"
-                    onChange={handleChange}
-                    onMouseUp={handleSave}
-                />
-
-                <p>Opacity: {activeCard?.opacity || 100}%</p>
-                <input
-                    type="range"
-                    name="opacity"
-                    min="0"
-                    max="100"
-                    value={activeCard?.opacity || 100}
-                    onChange={handleChange}
-                    onMouseUp={handleSave}
-                    onDoubleClick={handleReset}
-                />
-
-                
                 <div className="flex-column">
                     <p>Flip: </p>
                     <div className="flex-row">
