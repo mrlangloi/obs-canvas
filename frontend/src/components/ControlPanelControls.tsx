@@ -71,29 +71,29 @@ const ControlPanelControls = () => {
             min: -360,
             max: 360,
             value: activeCard?.rotation || 0,
-            onChange: handleChange,
-            onMouseUp: handleSave,
-            onDoubleClick: handleReset
+            handleChange: handleChange,
+            handleMouseUp: handleSave,
+            handleDoubleClick: handleReset
         },
         {
             name: 'width',
             label: 'Width',
             min: 1,
             max: 1280,
-            value: -1,
-            onChange: handleChange,
-            onMouseUp: handleSave,
-            onDoubleClick: handleReset
+            value: activeCard?.width || -1,
+            handleChange: handleChange,
+            handleMouseUp: handleSave,
+            handleDoubleClick: handleReset
         },
         {
             name: 'height',
             label: 'Height',
             min: 1,
             max: 720,
-            value: -1,
-            onChange: handleChange,
-            onMouseUp: handleSave,
-            onDoubleClick: handleReset
+            value: activeCard?.height || -1,
+            handleChange: handleChange,
+            handleMouseUp: handleSave,
+            handleDoubleClick: handleReset
         },
         {
             name: 'opacity',
@@ -101,9 +101,9 @@ const ControlPanelControls = () => {
             min: 0,
             max: 100,
             value: activeCard?.opacity || 100,
-            onChange: handleChange,
-            onMouseUp: handleSave,
-            onDoubleClick: handleReset
+            handleChange: handleChange,
+            handleMouseUp: handleSave,
+            handleDoubleClick: handleReset
         },
     ]
 

@@ -6,7 +6,7 @@ export interface SliderItem {
     max: number
     value: number
 
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-    onMouseUp: (e: React.MouseEvent<HTMLInputElement>) => void
-    onDoubleClick: (e: React.MouseEvent<HTMLInputElement>) => void
+    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    handleMouseUp: (e: React.MouseEvent<HTMLInputElement>) => void
+    handleDoubleClick: (e: React.MouseEvent<HTMLInputElement>) => void
 }
