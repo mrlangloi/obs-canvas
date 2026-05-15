@@ -6,9 +6,10 @@ import SmartMedia from './SmartMedia'
 
 interface Props {
     id: string
+    index: number
 }
 
-const Card: React.FC<Props> = ({ id }) => {
+const Card: React.FC<Props> = ({ id, index }) => {
 
     // import from store
     const card = useCardStore((state) => state.cards[id])
@@ -55,7 +56,7 @@ const Card: React.FC<Props> = ({ id }) => {
         transform: CSS.Translate.toString(transform),
         opacity: `${card.opacity}%`,
 
-        // zIndex: isDragging ? 999 : 1,
+        zIndex: index,
         cursor: isDragging ? 'grabbing' : 'grab',
     }
 
@@ -63,8 +64,8 @@ const Card: React.FC<Props> = ({ id }) => {
         rotate: `${card.rotation}deg`,
         width: `${card.width === -1 ? 'auto' : `${card.width}px`}`,
         height: `${card.height === -1 ? 'auto' : `${card.height}px`}`,
-        // padding: '8px',
         border: isSelected ? '1px solid lime' : card.visible ? '1px solid green' : '1px solid red',
+        transform: `scaleX(${card.flipX ? -1 : 1}) scaleY(${card.flipY ? -1 : 1})`,
         color: 'white',
         userSelect: 'none',
     }
