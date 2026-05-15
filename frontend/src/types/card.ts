@@ -5,7 +5,6 @@ interface Position {
 
 export interface CardItem {
     id: string
-    index: number
     label: string
     visible: boolean
 
