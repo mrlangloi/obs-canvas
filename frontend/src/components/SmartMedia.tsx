@@ -32,7 +32,7 @@ const SmartMedia: React.FC<SmartMediaProps> = ({ src, mediaType }) => {
     }, [])
 
     return (
-        <div ref={containerRef} style={{ minHeight: '150px', width: '100%', background: '#222' }}>
+        <div ref={containerRef} style={{ minHeight: '150px', width: '100%' }}>
             {isVisible ? (
                 mediaType === 'video' ? (
                     <video
