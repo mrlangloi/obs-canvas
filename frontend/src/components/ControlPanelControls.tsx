@@ -3,7 +3,6 @@ import { useSocket } from '../contexts/SocketContext'
 import useCardStore from '../store/useCardStore'
 import PositionDisplay from './PositionDisplay'
 import type { CardItem } from '../types/card'
-import type { SliderItem } from '../types/slider'
 import Slider from './Slider'
 
 const ControlPanelControls = () => {
@@ -27,6 +26,16 @@ const ControlPanelControls = () => {
             activeCardID!,
             { [name]: parseInt(value) },
             socket
+        )
+    }
+
+    const handleChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const { name, value } = e.target
+        updateCard(
+            activeCardID!,
+            { [name]: value },
+            socket,
+            true
         )
     }
 
@@ -64,63 +73,78 @@ const ControlPanelControls = () => {
         }
     }
 
-    const sliders: SliderItem[] = [
-        {
-            name: 'rotation',
-            label: 'Rotation',
-            min: -360,
-            max: 360,
-            value: activeCard?.rotation || 0,
-            handleChange: handleChange,
-            handleMouseUp: handleSave,
-            handleDoubleClick: handleReset
-        },
-        {
-            name: 'width',
-            label: 'Width',
-            min: 1,
-            max: 1280,
-            value: activeCard?.width || -1,
-            handleChange: handleChange,
-            handleMouseUp: handleSave,
-            handleDoubleClick: handleReset
-        },
-        {
-            name: 'height',
-            label: 'Height',
-            min: 1,
-            max: 720,
-            value: activeCard?.height || -1,
-            handleChange: handleChange,
-            handleMouseUp: handleSave,
-            handleDoubleClick: handleReset
-        },
-        {
-            name: 'opacity',
-            label: 'Opacity',
-            min: 0,
-            max: 100,
-            value: activeCard?.opacity || 100,
-            handleChange: handleChange,
-            handleMouseUp: handleSave,
-            handleDoubleClick: handleReset
-        },
-    ]
-
     return (
         <>
             <h2>Editing: {activeCard ? activeCard.label : 'None'}</h2>
 
             <div className="control-panel-controls">
+                <textarea
+                    name="url"
+                    value={activeCard?.url || 'Enter media URL..'}
+                    onChange={handleChangeText}
+                />
+
+                <textarea
+                    id="inner-text-input"
+                    name="text"
+                    value={activeCard?.text || 'Enter text...'}
+                    onChange={handleChangeText}
+                />
+                
                 <p>Position: <PositionDisplay cardID={activeCardID} /></p>
 
                 {/* Slider controls */}
-                {sliders.map((slider) => (
-                    <Slider 
-                        key={slider.name} 
-                        prop={slider} 
-                    />
-                ))}
+                <Slider 
+                    prop={{
+                        name: "rotation",
+                        label: "Rotation",
+                        min: -360,
+                        max: 360,
+                        value: activeCard?.rotation || 0,
+                        handleChange: handleChange,
+                        handleMouseUp: handleSave,
+                        handleDoubleClick: handleReset
+                    }}
+                />
+
+                <Slider
+                    prop={{
+                        name: "width",
+                        label: "Width",
+                        min: 1,
+                        max: 1280,
+                        value: activeCard?.width || -1,
+                        handleChange: handleChange,
+                        handleMouseUp: handleSave,
+                        handleDoubleClick: handleReset
+                    }}
+                />
+
+                <Slider
+                    prop={{
+                        name: "height",
+                        label: "Height",
+                        min: 1,
+                        max: 720,
+                        value: activeCard?.height || -1,
+                        handleChange: handleChange,
+                        handleMouseUp: handleSave,
+                        handleDoubleClick: handleReset
+                    }}
+                />
+
+                <Slider
+                    prop={{
+                        name: "opacity",
+                        label: "Opacity",
+                        min: 0,
+                        max: 100,
+                        value: activeCard?.opacity || 100,
+                        handleChange: handleChange,
+                        handleMouseUp: handleSave,
+                        handleDoubleClick: handleReset
+                    }}
+                />
 
                 <div className="flex-column">
                     <p>Flip: </p>
