@@ -20,32 +20,33 @@ const ControlPanelControls = () => {
     }
 
     // centralized change handler for input fields
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target
-        updateCard(
-            activeCardID!,
-            { [name]: parseInt(value) },
-            socket
-        )
-    }
+    const handleUpdate = (
+        e: React.ChangeEvent<HTMLInputElement 
+            | HTMLTextAreaElement>
+        | React.MouseEvent<HTMLInputElement>,
+        isFinal = false
+    ) => {
+        if (!activeCardID)
+            return
 
-    const handleChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        const { name, value } = e.target
-        updateCard(
-            activeCardID!,
-            { [name]: value },
-            socket,
-            true
-        )
-    }
+        const target = e.currentTarget
+        const { name, value } = target
 
-    const handleSave = (e: React.MouseEvent<HTMLInputElement>) => {
-        const { name, value } = e.currentTarget
+        let val: string | number | boolean = value
+
+        if (target instanceof HTMLInputElement) {
+            if (target.type === 'checkbox') {
+                val = target.checked
+            } else if (target.type === 'number' || target.type === 'range') {
+                val = parseInt(value) || 0
+            }
+        }
+
         updateCard(
-            activeCardID!,
-            { [name]: parseInt(value) },
+            activeCardID, 
+            { [name]: val },
             socket,
-            true // `isFinal = true` to trigger database save
+            isFinal
         )
     }
 
@@ -81,14 +82,14 @@ const ControlPanelControls = () => {
                 <textarea
                     name="url"
                     value={activeCard?.url || 'Enter media URL..'}
-                    onChange={handleChangeText}
+                    onChange={(e) => handleUpdate(e, true)}
                 />
 
                 <textarea
                     id="inner-text-input"
                     name="text"
                     value={activeCard?.text || 'Enter text...'}
-                    onChange={handleChangeText}
+                    onChange={(e) => handleUpdate(e, true)}
                 />
                 
                 <p>Position: <PositionDisplay cardID={activeCardID} /></p>
@@ -101,9 +102,8 @@ const ControlPanelControls = () => {
                         min: -360,
                         max: 360,
                         value: activeCard?.rotation || 0,
-                        handleChange: handleChange,
-                        handleMouseUp: handleSave,
-                        handleDoubleClick: handleReset
+                        handleUpdate: handleUpdate,
+                        handleReset: handleReset
                     }}
                 />
 
@@ -114,9 +114,8 @@ const ControlPanelControls = () => {
                         min: 1,
                         max: 1280,
                         value: activeCard?.width || -1,
-                        handleChange: handleChange,
-                        handleMouseUp: handleSave,
-                        handleDoubleClick: handleReset
+                        handleUpdate: handleUpdate,
+                        handleReset: handleReset
                     }}
                 />
 
@@ -127,9 +126,8 @@ const ControlPanelControls = () => {
                         min: 1,
                         max: 720,
                         value: activeCard?.height || -1,
-                        handleChange: handleChange,
-                        handleMouseUp: handleSave,
-                        handleDoubleClick: handleReset
+                        handleUpdate: handleUpdate,
+                        handleReset: handleReset
                     }}
                 />
 
@@ -140,9 +138,8 @@ const ControlPanelControls = () => {
                         min: 0,
                         max: 100,
                         value: activeCard?.opacity || 100,
-                        handleChange: handleChange,
-                        handleMouseUp: handleSave,
-                        handleDoubleClick: handleReset
+                        handleUpdate: handleUpdate,
+                        handleReset: handleReset
                     }}
                 />
 
@@ -153,15 +150,13 @@ const ControlPanelControls = () => {
                             type="checkbox"
                             name="flipX"
                             checked={activeCard?.flipX || false}
-                            onChange={handleChange}
-                            onMouseUp={handleSave}
+                            onChange={(e) => handleUpdate(e, true)}
                         />
                         <input 
                             type="checkbox"
                             name="flipY"
                             checked={activeCard?.flipY || false}
-                            onChange={handleChange}
-                            onMouseUp={handleSave}
+                            onChange={(e) => handleUpdate(e, true)}
                         />
                     </div>
                 </div>

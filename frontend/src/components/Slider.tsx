@@ -1,7 +1,7 @@
 import type { SliderItem } from '../types/slider'
 
 const Slider = ({ prop } : { prop: SliderItem }) => {
-    const { name, label, min, max, value, handleChange, handleMouseUp, handleDoubleClick } = prop
+    const { name, label, min, max, value, handleUpdate, handleReset } = prop
 
     return (
         <div className="slider-container">
@@ -11,7 +11,7 @@ const Slider = ({ prop } : { prop: SliderItem }) => {
                     className="number-input"
                     type="number"
                     value={value}
-                    onChange={handleChange}
+                    onChange={(e) => handleUpdate(e, true)}
                 />
             </div>
             {/* <p>{label}: {value}</p> */}
@@ -21,9 +21,9 @@ const Slider = ({ prop } : { prop: SliderItem }) => {
                 min={min}
                 max={max}
                 value={value}
-                onChange={handleChange}
-                onMouseUp={handleMouseUp}
-                onDoubleClick={handleDoubleClick}
+                onChange={(e) => handleUpdate(e)}
+                onMouseUp={(e) => handleUpdate(e, true)}
+                onDoubleClick={handleReset}
             />
         </div>
     )
