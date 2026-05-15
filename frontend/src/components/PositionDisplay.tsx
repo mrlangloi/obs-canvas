@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import useCardStore from '../store/useCardStore'
 import { useSocket } from '../contexts/SocketContext'
 
