@@ -74,6 +74,45 @@ const ControlPanelControls = () => {
         }
     }
 
+    const slider_config = [
+        {
+            name: "rotation",
+            label: "Rotation",
+            min: -360,
+            max: 360,
+            value: activeCard?.rotation || 0,
+            handleUpdate: handleUpdate,
+            handleReset: handleReset
+        },
+        {
+            name: "width",
+            label: "Width",
+            min: 1,
+            max: 1280,
+            value: activeCard?.width || -1,
+            handleUpdate: handleUpdate,
+            handleReset: handleReset
+        },
+        {
+            name: "height",
+            label: "Height",
+            min: 1,
+            max: 720,
+            value: activeCard?.height || -1,
+            handleUpdate: handleUpdate,
+            handleReset: handleReset
+        },
+        {
+            name: "opacity",
+            label: "Opacity",
+            min: 0,
+            max: 100,
+            value: activeCard?.opacity || 100,
+            handleUpdate: handleUpdate,
+            handleReset: handleReset
+        }
+    ]
+
     return (
         <>
             <h2>Editing: {activeCard ? activeCard.label : 'None'}</h2>
@@ -95,7 +134,14 @@ const ControlPanelControls = () => {
                 <p>Position: <PositionDisplay cardID={activeCardID} /></p>
 
                 {/* Slider controls */}
-                <Slider 
+                {slider_config.map((config) => (
+                    <Slider
+                        key={config.name}
+                        prop={config}
+                    />
+                ))}
+
+                {/* <Slider 
                     prop={{
                         name: "rotation",
                         label: "Rotation",
@@ -141,17 +187,19 @@ const ControlPanelControls = () => {
                         handleUpdate: handleUpdate,
                         handleReset: handleReset
                     }}
-                />
+                /> */}
 
                 <div className="flex-column">
                     <p>Flip: </p>
                     <div className="flex-row">
+                        <label>Horizontal: </label>
                         <input 
                             type="checkbox"
                             name="flipX"
                             checked={activeCard?.flipX || false}
                             onChange={(e) => handleUpdate(e, true)}
                         />
+                        <label>Vertical: </label>
                         <input 
                             type="checkbox"
                             name="flipY"
