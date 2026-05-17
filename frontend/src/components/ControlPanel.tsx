@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import useAuthStore from '../store/useAuthStore'
 import ControlPanelControls from './ControlPanelControls'
-import './ControlPanel.modules.css'
+import styles from './ControlPanel.module.css'
 
 const ControlPanel = () => {
 
@@ -15,7 +15,7 @@ const ControlPanel = () => {
 
     useEffect(() => {
         if (isLoggedIn) {
-            console.log("Twitch login data:", user);
+            console.log("Twitch login data:", user)
         }
     }, [isLoggedIn, user])
 
@@ -26,42 +26,75 @@ const ControlPanel = () => {
     }
 
     return (
-        <aside className={`control-panel ${!showPanel ? 'hidden' : ''}`}>
-            {/* twitch login/logout */}
-            {isLoggedIn ? (
-                <div className="twitch-user">
-                    <div className="twitch-user-profile">
-                        {user?.profile_image_url && (
-                            <img
-                                src={user.profile_image_url}
-                                alt="Avatar"
-                                style={{ width: '32px', borderRadius: '50%' }}
-                            />
-                        )}
-                        <span>{user?.display_name}</span>
+        <aside className={`${styles.panel} ${!showPanel ? styles.hidden : ''}`}>
+
+            <div className={styles.header}>
+                <div className={styles.wordmark}>
+                    <div className={styles.wordmarkIcon}>
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            <rect x="1" y="1" width="5" height="5" rx="1"/>
+                            <rect x="8" y="1" width="5" height="5" rx="1"/>
+                            <rect x="1" y="8" width="5" height="5" rx="1"/>
+                            <rect x="8" y="8" width="5" height="5" rx="1"/>
+                        </svg>
                     </div>
-                    <button onClick={logout}>Logout</button>
+                    <span className={styles.wordmarkText}>OBS Canvas</span>
                 </div>
-            ) : (
-                <button onClick={handleLogin} style={{ backgroundColor: '#9146FF', color: 'white' }}>
-                    Login with Twitch
-                </button>
-            )}
 
-            <h2 className="control-panel-title">Control Panel</h2>
+                <div className={styles.auth}>
+                    {/* twitch login/logout */}
+                    {isLoggedIn ? (
+                        <div className={styles.userCard}>
+                            {user?.profile_image_url ? (
+                                <img className={styles.avatar} src={user.profile_image_url} alt="Avatar" />
+                            ) : (
+                                <div className={styles.avatarPlaceholder}>◎</div>
+                            )}
+                            <div className={styles.userInfo}>
+                                <div className={styles.userName}>{user?.display_name}</div>
+                                <div className={styles.userBadge}>
+                                    <span className={styles.badgeDot} />
+                                    Connected
+                                </div>
+                            </div>
+                            <button className={`${styles.btn} ${styles.btnGhost}`} onClick={logout}>
+                                <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                    <path d="M5 7h7M9 4.5l2.5 2.5L9 9.5"/>
+                                    <path d="M9 2H3a1 1 0 00-1 1v8a1 1 0 001 1h6"/>
+                                </svg>
+                                Sign out
+                            </button>
+                        </div>
+                    ) : (
+                        <button className={`${styles.btn} ${styles.btnTwitch}`} onClick={handleLogin}>
+                            <svg viewBox="0 0 14 14" fill="currentColor">
+                                <path d="M2 1L1 3v9h3v2h2l2-2h2l3-3V1H2zm9 8l-2 2H7l-2 2v-2H2V2h9v7zM9 4H8v3h1V4zm-2.5 0H5.5v3h1V4z"/>
+                            </svg>
+                            Continue with Twitch
+                        </button>
+                    )}
+                </div>
+            </div>
 
-            {isAuthorized ? (
-                <ControlPanelControls />
-            ) : (
-                <p>
-                    This account is not authorized to use this app. Please log in with a Twitch account that has moderator privileges in the current Twitch channel.
-                </p>
-            )}
+            <div className={styles.divider} />
 
-            <button className="toggle-tab" onClick={() => setShowPanel(!showPanel)}>
+            <div className={styles.sectionLabel}>Controls</div>
+
+            <div className={styles.body}>
+                {isAuthorized ? (
+                    <ControlPanelControls />
+                ) : (
+                    <p className={styles.notice}>
+                        {isLoggedIn
+                            ? "This account doesn't have moderator access to this channel."
+                            : "Sign in with Twitch to access canvas controls."}
+                    </p>
+                )}
+            </div>
+
+            <button className={styles.toggle} onClick={() => setShowPanel(!showPanel)}>
                 {showPanel ? '◀' : '▶'}
             </button>
-
 
         </aside>
     )
