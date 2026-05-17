@@ -1,0 +1,353 @@
+/* ── Container ───────────────────────────────────────────────── */
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 4px;
+}
+
+/* ── Editing label ───────────────────────────────────────────── */
+
+.editingLabel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: #111827;
+    border: 1px solid rgba(56, 189, 248, 0.12);
+    border-radius: 8px;
+    margin-bottom: 2px;
+}
+
+.editingDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #38bdf8;
+    box-shadow: 0 0 6px #38bdf8;
+    flex-shrink: 0;
+    animation: pulseDot 2s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+}
+
+.editingText {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.35);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.editingName {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── Empty state ─────────────────────────────────────────────── */
+
+.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 32px 16px;
+    text-align: center;
+}
+
+.emptyIcon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: #111827;
+    border: 1px solid rgba(56, 189, 248, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.15);
+}
+
+.emptyIcon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.emptyText {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: rgba(255, 255, 255, 0.25);
+    letter-spacing: 0.04em;
+    line-height: 1.6;
+}
+
+/* ── Section divider ─────────────────────────────────────────── */
+
+.sectionDivider {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0 4px;
+}
+
+.sectionDivider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(56, 189, 248, 0.08);
+}
+
+/* ── Control row ─────────────────────────────────────────────── */
+
+.controlRow {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    background: #111827;
+    border: 1px solid rgba(56, 189, 248, 0.08);
+    border-radius: 8px;
+    transition: border-color 0.15s ease;
+}
+
+.controlRow:hover {
+    border-color: rgba(56, 189, 248, 0.18);
+}
+
+.controlLabel {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+/* ── Position row ────────────────────────────────────────────── */
+
+.positionRow {
+    display: flex;
+    gap: 6px;
+}
+
+/*
+    PositionDisplay renders two <input type="number" className="number-input">.
+    We target them here via :global so the panel controls their appearance.
+*/
+.positionRow :global(.number-input) {
+    flex: 1;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(56, 189, 248, 0.05);
+    border: 1px solid rgba(56, 189, 248, 0.1);
+    border-radius: 5px;
+    padding: 6px 8px;
+    outline: none;
+    width: 0; /* flex sizes it; prevents overflow */
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.positionRow :global(.number-input):focus {
+    border-color: rgba(56, 189, 248, 0.35);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.positionRow :global(.number-input)::-webkit-inner-spin-button,
+.positionRow :global(.number-input)::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.positionRow :global(.number-input)[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* ── Textarea ────────────────────────────────────────────────── */
+
+.textareaRow {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px;
+    background: #111827;
+    border: 1px solid rgba(56, 189, 248, 0.08);
+    border-radius: 8px;
+    transition: border-color 0.15s ease;
+}
+
+.textareaRow:focus-within {
+    border-color: rgba(56, 189, 248, 0.25);
+}
+
+.textarea {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.7);
+    background: transparent;
+    border: none;
+    outline: none;
+    resize: none;
+    width: 100%;
+    line-height: 1.6;
+    min-height: 52px;
+}
+
+.textarea::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Flip checkboxes ─────────────────────────────────────────── */
+
+.flipRow {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    background: #111827;
+    border: 1px solid rgba(56, 189, 248, 0.08);
+    border-radius: 8px;
+    transition: border-color 0.15s ease;
+}
+
+.flipRow:hover {
+    border-color: rgba(56, 189, 248, 0.18);
+}
+
+.flipOptions {
+    display: flex;
+    gap: 8px;
+}
+
+.flipOption {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 10px;
+    background: rgba(56, 189, 248, 0.04);
+    border: 1px solid rgba(56, 189, 248, 0.08);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.flipOption:has(.checkbox:checked) {
+    background: rgba(56, 189, 248, 0.08);
+    border-color: rgba(56, 189, 248, 0.25);
+}
+
+.flipOptionLabel {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    pointer-events: none;
+}
+
+.flipOption:has(.checkbox:checked) .flipOptionLabel {
+    color: #38bdf8;
+}
+
+.checkbox {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    border: 1.5px solid rgba(56, 189, 248, 0.25);
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.checkbox:checked {
+    background: #38bdf8;
+    border-color: #38bdf8;
+}
+
+.checkbox:checked::after {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: 1px;
+    width: 5px;
+    height: 8px;
+    border: 1.5px solid #0a0f1e;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg);
+}
+
+/* ── Dimension row (width / height with auto toggle) ─────────── */
+
+.dimensionRow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    background: #111827;
+    border: 1px solid rgba(56, 189, 248, 0.08);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+}
+
+.dimensionRow:hover {
+    border-color: rgba(56, 189, 248, 0.18);
+}
+
+.dimensionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+}
+
+.autoToggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.autoToggleLabel {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.25);
+    transition: color 0.15s ease;
+}
+
+.autoToggle:has(.checkbox:checked) .autoToggleLabel {
+    color: #38bdf8;
+}
+
+/*
+    When the Slider is shown inside a dimensionRow, remove its own
+    background/border/radius since the parent dimensionRow provides them.
+*/
+.dimensionRow > :global(.slider-container-seamless) {
+    background: transparent;
+    border: none;
+    border-top: 1px solid rgba(56, 189, 248, 0.08);
+    border-radius: 0;
+    padding: 10px 12px 12px;
+}

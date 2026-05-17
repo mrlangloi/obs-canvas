@@ -4,6 +4,7 @@ import useCardStore from '../store/useCardStore'
 import PositionDisplay from './PositionDisplay'
 import type { CardItem } from '../types/card'
 import Slider from './Slider'
+import styles from './ControlPanelControls.module.css'
 
 const ControlPanelControls = () => {
 
@@ -21,9 +22,9 @@ const ControlPanelControls = () => {
 
     // centralized change handler for input fields
     const handleUpdate = (
-        e: React.ChangeEvent<HTMLInputElement 
+        e: React.ChangeEvent<HTMLInputElement
             | HTMLTextAreaElement>
-        | React.MouseEvent<HTMLInputElement>,
+            | React.MouseEvent<HTMLInputElement>,
         isFinal = false
     ) => {
         if (!activeCardID)
@@ -43,14 +44,14 @@ const ControlPanelControls = () => {
         }
 
         updateCard(
-            activeCardID, 
+            activeCardID,
             { [name]: val },
             socket,
             isFinal
         )
     }
 
-    const handleReset = (e: React.MouseEvent<HTMLInputElement>) => {        
+    const handleReset = (e: React.MouseEvent<HTMLInputElement>) => {
         // get the name of the property as a key
         const name = e.currentTarget.name as keyof CardItem
 
@@ -74,31 +75,25 @@ const ControlPanelControls = () => {
         }
     }
 
-    const slider_config = [
+    // -1 is the sentinel value Card.tsx uses to mean "auto"
+    const isWidthAuto = (activeCard?.width ?? -1) === -1
+    const isHeightAuto = (activeCard?.height ?? -1) === -1
+
+    const handleAutoToggle = (dimension: 'width' | 'height', currentlyAuto: boolean) => {
+        // toggling ON sets -1 so Card.tsx uses "auto"
+        // toggling OFF sets it to the card's current dimension
+        const value = currentlyAuto ? -1 : (dimension === 'width' ? 640 : 360)
+        updateCard(activeCardID!, { [dimension]: value }, socket, true)
+    }
+
+
+    const sliderConfig = [
         {
             name: "rotation",
             label: "Rotation",
             min: -360,
             max: 360,
             value: activeCard?.rotation || 0,
-            handleUpdate: handleUpdate,
-            handleReset: handleReset
-        },
-        {
-            name: "width",
-            label: "Width",
-            min: 1,
-            max: 1280,
-            value: activeCard?.width || -1,
-            handleUpdate: handleUpdate,
-            handleReset: handleReset
-        },
-        {
-            name: "height",
-            label: "Height",
-            min: 1,
-            max: 720,
-            value: activeCard?.height || -1,
             handleUpdate: handleUpdate,
             handleReset: handleReset
         },
@@ -114,104 +109,146 @@ const ControlPanelControls = () => {
     ]
 
     return (
-        <>
-            <h2>Editing: {activeCard ? activeCard.label : 'None'}</h2>
+        <div className={styles.controls}>
 
-            <div className="control-panel-controls">
+            {/* Active card indicator */}
+            <div className={styles.editingLabel}>
+                <span className={styles.editingDot} />
+                <span className={styles.editingText}>
+                    Editing&nbsp;<span className={styles.editingName}>{activeCard?.label ?? 'Card'}</span>
+                </span>
+            </div>
+
+            {/* Media URL */}
+            <span className={styles.sectionDivider}>Media</span>
+            <div className={styles.textareaRow}>
+                <span className={styles.controlLabel}>URL</span>
                 <textarea
+                    className={styles.textarea}
                     name="url"
-                    value={activeCard?.url || 'Enter media URL..'}
+                    value={activeCard?.url || ''}
+                    placeholder="Enter media URL..."
                     onChange={(e) => handleUpdate(e, true)}
                 />
+            </div>
 
+            {/* Inner text */}
+            <div className={styles.textareaRow}>
+                <span className={styles.controlLabel}>Text</span>
                 <textarea
+                    className={styles.textarea}
                     id="inner-text-input"
                     name="text"
-                    value={activeCard?.text || 'Enter text...'}
+                    value={activeCard?.text || ''}
+                    placeholder="Enter text..."
                     onChange={(e) => handleUpdate(e, true)}
                 />
-                
-                <p>Position: <PositionDisplay cardID={activeCardID} /></p>
+            </div>
 
-                {/* Slider controls */}
-                {slider_config.map((config) => (
+            {/* Position */}
+            <span className={styles.sectionDivider}>Transform</span>
+            <div className={styles.controlRow}>
+                <span className={styles.controlLabel}>Position</span>
+                <div className={styles.positionRow}>
+                    <PositionDisplay cardID={activeCardID} />
+                </div>
+            </div>
+
+            {/* Width */}
+            <div className={styles.dimensionRow}>
+                <div className={styles.dimensionHeader}>
+                    <span className={styles.controlLabel}>Width</span>
+                    <label className={styles.autoToggle}>
+                        <input
+                            className={styles.checkbox}
+                            type="checkbox"
+                            checked={isWidthAuto}
+                            onChange={() => handleAutoToggle('width', !isWidthAuto)}
+                        />
+                        <span className={styles.autoToggleLabel}>Auto</span>
+                    </label>
+                </div>
+                {!isWidthAuto && (
                     <Slider
-                        key={config.name}
-                        prop={config}
+                        prop={{
+                            name: "width",
+                            label: "Width",
+                            min: 1,
+                            max: 1280,
+                            value: activeCard?.width ?? 640,
+                            handleUpdate,
+                            handleReset
+                        }}
+                        hideLabel
                     />
-                ))}
+                )}
+            </div>
 
-                {/* <Slider 
-                    prop={{
-                        name: "rotation",
-                        label: "Rotation",
-                        min: -360,
-                        max: 360,
-                        value: activeCard?.rotation || 0,
-                        handleUpdate: handleUpdate,
-                        handleReset: handleReset
-                    }}
-                />
+            {/* Height */}
+            <div className={styles.dimensionRow}>
+                <div className={styles.dimensionHeader}>
+                    <span className={styles.controlLabel}>Height</span>
+                    <label className={styles.autoToggle}>
+                        <input
+                            className={styles.checkbox}
+                            type="checkbox"
+                            checked={isHeightAuto}
+                            onChange={() => handleAutoToggle('height', !isHeightAuto)}
+                        />
+                        <span className={styles.autoToggleLabel}>Auto</span>
+                    </label>
+                </div>
+                {!isHeightAuto && (
+                    <Slider
+                        prop={{
+                            name: "height",
+                            label: "Height",
+                            min: 1,
+                            max: 720,
+                            value: activeCard?.height ?? 360,
+                            handleUpdate,
+                            handleReset
+                        }}
+                        hideLabel
+                    />
+                )}
+            </div>
 
-                <Slider
-                    prop={{
-                        name: "width",
-                        label: "Width",
-                        min: 1,
-                        max: 1280,
-                        value: activeCard?.width || -1,
-                        handleUpdate: handleUpdate,
-                        handleReset: handleReset
-                    }}
-                />
+            {/* Sliders */}
+            {sliderConfig.map((config) => (
+                <Slider key={config.name} prop={config} />
+            ))}
 
-                <Slider
-                    prop={{
-                        name: "height",
-                        label: "Height",
-                        min: 1,
-                        max: 720,
-                        value: activeCard?.height || -1,
-                        handleUpdate: handleUpdate,
-                        handleReset: handleReset
-                    }}
-                />
-
-                <Slider
-                    prop={{
-                        name: "opacity",
-                        label: "Opacity",
-                        min: 0,
-                        max: 100,
-                        value: activeCard?.opacity || 100,
-                        handleUpdate: handleUpdate,
-                        handleReset: handleReset
-                    }}
-                /> */}
-
-                <div className="flex-column">
-                    <p>Flip: </p>
-                    <div className="flex-row">
-                        <label>Horizontal: </label>
-                        <input 
+            {/* Flip */}
+            <span className={styles.sectionDivider}>Flip</span>
+            <div className={styles.flipRow}>
+                <div className={styles.flipOptions}>
+                    <label className={styles.flipOption}>
+                        <span className={styles.flipOptionLabel}>Horizontal</span>
+                        <input
+                            className={styles.checkbox}
                             type="checkbox"
                             name="flipX"
                             checked={activeCard?.flipX || false}
                             onChange={(e) => handleUpdate(e, true)}
                         />
-                        <label>Vertical: </label>
-                        <input 
+                    </label>
+                    <label className={styles.flipOption}>
+                        <span className={styles.flipOptionLabel}>Vertical</span>
+                        <input
+                            className={styles.checkbox}
                             type="checkbox"
                             name="flipY"
                             checked={activeCard?.flipY || false}
                             onChange={(e) => handleUpdate(e, true)}
                         />
-                    </div>
+                    </label>
                 </div>
-
             </div>
-        </>
+
+        </div>
     )
 }
 
 export default ControlPanelControls
+
