@@ -75,10 +75,11 @@ const Canvas = () => {
                 onDragMove={handleDragMove}
                 onDragEnd={handleDragEnd}
             >
-                {cardIDs.map((id) => (
+                {cardIDs.map((id, index) => (
                     <Card 
                         key={id} 
                         id={id}
+                        index={index}
                     />
                 ))}
             </DndContext>

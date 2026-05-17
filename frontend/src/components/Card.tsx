@@ -6,9 +6,10 @@ import SmartMedia from './SmartMedia'
 
 interface Props {
     id: string
+    index: number
 }
 
-const Card: React.FC<Props> = ({ id }) => {
+const Card: React.FC<Props> = ({ id, index }) => {
 
     // import from store
     const card = useCardStore((state) => state.cards[id])
@@ -23,6 +24,9 @@ const Card: React.FC<Props> = ({ id }) => {
 
     if (!card)
         return null
+
+    // 
+    const cardVisibility = card.visible ? 'card' : 'card streamer-mode'
 
     // const getMediaType = (url: string) => {
     //     const extension = url.split('.').pop()?.toLowerCase();
@@ -50,21 +54,24 @@ const Card: React.FC<Props> = ({ id }) => {
         left: card.position.x,
         // transform during mouse-drag
         transform: CSS.Translate.toString(transform),
-        // zIndex: isDragging ? 999 : 1,
+        opacity: `${card.opacity}%`,
+
+        zIndex: index,
         cursor: isDragging ? 'grabbing' : 'grab',
     }
 
     const contentStyle: React.CSSProperties = {
         rotate: `${card.rotation}deg`,
-        // opacity: isDragging ? 0.8 : 1,
-        padding: '8px',
-        border: isSelected ? '1px solid green' : '1px solid red',
+        width: `${card.width === -1 ? 'auto' : `${card.width}px`}`,
+        height: `${card.height === -1 ? 'auto' : `${card.height}px`}`,
+        border: isSelected ? '1px solid lime' : card.visible ? '1px solid green' : '1px solid red',
+        transform: `scaleX(${card.flipX ? -1 : 1}) scaleY(${card.flipY ? -1 : 1})`,
         color: 'white',
         userSelect: 'none',
     }
 
     const handleMouseDown = () => {
-        if (isSelected) 
+        if (isSelected)
             return
 
         setActiveCardID(card.id)
@@ -73,13 +80,14 @@ const Card: React.FC<Props> = ({ id }) => {
     return (
         <div
             ref={setNodeRef}
+            className={cardVisibility}
             style={wrapperStyle}
             {...listeners}
             {...attributes}
             onMouseDown={handleMouseDown}
         >
             <div style={contentStyle}>
-                {card.text}
+                <p>{card.text}</p>
                 {card.mediaType !== 'empty' ? <SmartMedia src={card.url} mediaType={card.mediaType} /> : <></>}
             </div>
 
