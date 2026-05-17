@@ -1,21 +1,41 @@
 import type { SliderItem } from '../types/slider'
+import styles from './Slider.module.css'
 
-const Slider = ({ prop } : { prop: SliderItem }) => {
+interface Props {
+    prop: SliderItem
+    hideLabel?: boolean  // set true when a parent already provides the label
+}
+
+const Slider = ({ prop, hideLabel = false }: Props) => {
     const { name, label, min, max, value, handleUpdate, handleReset } = prop
 
     return (
-        <div className="slider-container">
-            <div className="slider-label">
-                <label>{label}: </label>
-                <input
-                    className="number-input"
-                    type="number"
-                    value={value}
-                    onChange={(e) => handleUpdate(e, true)}
-                />
-            </div>
-            {/* <p>{label}: {value}</p> */}
+        <div className={`${styles.sliderContainer} ${hideLabel ? 'slider-container-seamless' : ''}`}>
+            {!hideLabel && (
+                <div className={styles.sliderHeader}>
+                    <label className={styles.sliderLabel}>{label}</label>
+                    <input
+                        className={styles.numberInput}
+                        type="number"
+                        name={name}
+                        value={value}
+                        onChange={(e) => handleUpdate(e, true)}
+                    />
+                </div>
+            )}
+            {hideLabel && (
+                <div className={styles.sliderHeader}>
+                    <input
+                        className={styles.numberInput}
+                        type="number"
+                        name={name}
+                        value={value}
+                        onChange={(e) => handleUpdate(e, true)}
+                    />
+                </div>
+            )}
             <input
+                className={styles.slider}
                 type="range"
                 name={name}
                 min={min}
@@ -25,6 +45,7 @@ const Slider = ({ prop } : { prop: SliderItem }) => {
                 onMouseUp={(e) => handleUpdate(e, true)}
                 onDoubleClick={handleReset}
             />
+            <span className={styles.sliderHint}>double-click to reset</span>
         </div>
     )
 }
