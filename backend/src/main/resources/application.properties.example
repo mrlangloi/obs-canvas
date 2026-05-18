@@ -1,10 +1,11 @@
 spring.application.name=obs-canvas-backend
 
 server.port=5174
-socket.server.port=5175
+socket.server.host=${SOCKETIO_HOST:localhost}
+socket.server.port=${SOCKETIO_PORT:5175}
 
 # for Socket.io / CORS
-app.frontend.url=http://localhost:5173
+app.frontend.url=${FRONTEND_URL:http://localhost:5173}
 
 # twitch registration details
 spring.security.oauth2.client.registration.twitch.client-id=

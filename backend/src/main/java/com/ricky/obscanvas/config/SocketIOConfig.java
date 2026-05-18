@@ -12,13 +12,16 @@ public class SocketIOConfig {
     @Value("${app.frontend.url}")
     private String frontendURL;
 
+    @Value("${socket.server.host}")
+    private String socketServerHost;
+
     @Value("${socket.server.port}")
     private int socketServerPort;
 
     @Bean
     public SocketIOServer socketIOServer() {
         com.corundumstudio.socketio.Configuration config = new com.corundumstudio.socketio.Configuration();
-        config.setHostname("localhost");
+        config.setHostname(socketServerHost);
         // where the Socket.io traffic will live
         config.setPort(socketServerPort);
         
