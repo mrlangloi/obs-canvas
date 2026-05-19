@@ -24,6 +24,9 @@ public class SocketIOConfig {
         config.setHostname(socketServerHost);
         // where the Socket.io traffic will live
         config.setPort(socketServerPort);
+
+        // tells the server to expect the client to include "/socket.io" in the URL
+        config.setContext("/socket.io");
         
         // this allows the frontend to talk to this port
         config.setOrigin(frontendURL);
