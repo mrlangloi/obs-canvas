@@ -14,6 +14,10 @@ public class SocketService {
 
     public SocketService(SocketIOServer server) {
         this.server = server;
+    }
+
+    @PostConstruct
+    public void start() {
 
         // listen for new connections
         this.server.addConnectListener(client -> {
@@ -24,7 +28,7 @@ public class SocketService {
         // String.class means we expect the data sent to be text
         this.server.addEventListener("send_ping", String.class, (client, data, ackSender) -> {
             System.out.println("Client said: " + data);
-            
+
             // send a response back to the client
             client.sendEvent("server_pong", "Hello from Spring Boot 4!");
         });
@@ -32,7 +36,8 @@ public class SocketService {
         // listen for card updates from the frontend
         this.server.addEventListener("card_update", CardItem.class, (client, data, ackSender) -> {
             // log the movement for debugging
-            System.out.println("Card " + data.id() + " moved to: (" + data.position().x() + ", " + data.position().y() + ")");
+            System.out.println(
+                    "Card " + data.id() + " moved to: (" + data.position().x() + ", " + data.position().y() + ")");
 
             // broadcast the data to everyone (except the sender) so their canvas updates
             client.getNamespace().getBroadcastOperations().sendEvent("card_updated", client, data);
@@ -40,16 +45,19 @@ public class SocketService {
             // server.getBroadcastOperations().sendEvent("card_updated", data);
         });
 
+        // listen for card saves from the frontend to save to the database (not implemented yet)
         this.server.addEventListener("card_save", CardItem.class, (client, data, ackSender) -> {
             // log the final position for debugging
-            System.out.println("Card " + data.id() + " saved at: (" + data.position().x() + ", " + data.position().y() + ")");
+            System.out.println(
+                    "Card " + data.id() + " saved at: (" + data.position().x() + ", " + data.position().y() + ")");
         });
 
+        System.out.println("Socket server started.");
+        this.server.start();
     }
 
-    @PostConstruct
-    public void start() { server.start(); }
-
     @PreDestroy
-    public void stop() { server.stop(); }
+    public void stop() {
+        this.server.stop();
+    }
 }
