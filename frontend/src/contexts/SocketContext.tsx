@@ -6,7 +6,14 @@ const SocketContext = createContext<Socket | undefined>(undefined)
 
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
     // useRef ensures the socket instance is stable across re-renders
-    const socket = useRef(io(import.meta.env.VITE_SOCKET_URL))
+    const socket = useRef(io(import.meta.env.VITE_SOCKET_URL, {
+        transports: ['websocket'],
+        upgrade: false,
+        secure: true,
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 2000,
+    }))
 
     useEffect(() => {
         const s = socket.current
