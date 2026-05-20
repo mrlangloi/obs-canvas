@@ -22,7 +22,7 @@ const ControlPanel = () => {
     const handleLogin = () => {
         // redirect to the backend's twitch auth endpoint
         const backendURL = import.meta.env.VITE_BACKEND_URL
-        window.location.href = `${backendURL}/oauth2/authorization/twitch`
+        window.location.assign(`${backendURL}/oauth2/authorization/twitch`)
     }
 
     return (
