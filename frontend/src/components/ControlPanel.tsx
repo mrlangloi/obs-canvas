@@ -19,11 +19,11 @@ const ControlPanel = () => {
         }
     }, [isLoggedIn, user])
 
-    const handleLogin = () => {
-        // redirect to the backend's twitch auth endpoint
-        const backendURL = import.meta.env.VITE_BACKEND_URL
-        window.location.assign(`${backendURL}/oauth2/authorization/twitch`)
-    }
+    // const handleLogin = () => {
+    //     // redirect to the backend's twitch auth endpoint
+    //     const backendURL = import.meta.env.VITE_BACKEND_URL
+    //     window.location.assign(`${backendURL}/oauth2/authorization/twitch`)
+    // }
 
     return (
         <aside className={`${styles.panel} ${!showPanel ? styles.hidden : ''}`}>
