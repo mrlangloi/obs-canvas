@@ -67,7 +67,7 @@ const ControlPanel = () => {
                         </div>
                     ) : (
                         <a href={`${import.meta.env.VITE_BACKEND_URL}/oauth2/authorization/twitch`}>
-                            <button className={`${styles.btn} ${styles.btnTwitch}`} onClick={handleLogin}>
+                            <button className={`${styles.btn} ${styles.btnTwitch}`}>
                                 <svg viewBox="0 0 14 14" fill="currentColor">
                                     <path d="M2 1L1 3v9h3v2h2l2-2h2l3-3V1H2zm9 8l-2 2H7l-2 2v-2H2V2h9v7zM9 4H8v3h1V4zm-2.5 0H5.5v3h1V4z"/>
                                 </svg>
