@@ -83,7 +83,7 @@ const ControlPanel = () => {
             <div className={styles.sectionLabel}>Controls</div>
 
             <div className={styles.body}>
-                {isAuthorized ? (
+                {/* {isAuthorized ? (
                     <ControlPanelControls />
                 ) : (
                     <p className={styles.notice}>
@@ -91,7 +91,8 @@ const ControlPanel = () => {
                             ? "This account doesn't have moderator access to this channel."
                             : "Sign in with Twitch to access canvas controls."}
                     </p>
-                )}
+                )} */}
+                <ControlPanelControls />
             </div>
 
             <button className={styles.toggle} onClick={() => setShowPanel(!showPanel)}>
