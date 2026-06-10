@@ -8,7 +8,7 @@ const ControlPanel = () => {
     // auth store
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
     const user = useAuthStore((state) => state.user)
-    const isAuthorized = useAuthStore((state) => state.user?.isAuthorized)
+    // const isAuthorized = useAuthStore((state) => state.user?.isAuthorized)
     const logout = useAuthStore((state) => state.logout)
 
     const [showPanel, setShowPanel] = useState(true)
