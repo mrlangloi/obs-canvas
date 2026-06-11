@@ -17,7 +17,7 @@ const ControlPanelControls = () => {
     const updateCard = useCardStore((state) => state.updateCard)
 
     if (!activeCardID) {
-        return <p>No card selected. Click on a card to edit its properties</p>
+        return <p style={{ color: '#EEE' }}>No card selected. Click on a card to edit its properties</p>
     }
 
     // centralized change handler for input fields
